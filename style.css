@@ -1,0 +1,106 @@
+:root {
+	/*COLOR*/
+	--bg: #232323;
+	--text: #909079;
+	--line: #909079;
+
+	--snakeHead: #B6FF00;
+	--snake: #61EAA0;
+	--food: #980B10;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+#containerGame {
+	width: 100vw;
+	height: 100vh;
+
+	/*NEED???*/
+	/*max-width: 1000px;
+	max-height: 700px;*/
+	/*NEED???*/
+
+	margin: 0 auto;
+}
+
+#boxInfo {
+	width: 100%;
+	height: 10%;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+
+	background-color: var(--bg);
+}
+
+#boxGame {
+	width: 100%;
+	height: 80%;
+
+	background-color: var(--bg);
+
+	border: 2px green solid;
+}
+
+#boxControl {
+	width: 100%;
+	height: 10%;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+
+	background-color: var(--bg);
+}
+
+#scoreInfo p {
+	font-size: 4vh;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: var(--text);
+}
+
+.button {
+	min-width: 15vw;
+	height: 8vh;
+
+	background-color: var(--bg);
+	border: 5px var(--text) solid;
+	border-radius: 5px;
+	color: var(--text);
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+#buttonStart {
+	width: 30vw;
+}
+
+.buttonActive {
+	background-color: var(--text);
+	color: var(--bg);
+
+}
+
+#scoreInfo {
+	display: none;
+}
+
+#buttonsControlLeft {
+	display: none;
+}
+
+#buttonsControlCenter {
+	display: none;
+}
+
+#buttonsControlRight {
+	display: none;
+}
