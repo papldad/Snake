@@ -1,5 +1,9 @@
 let viewModel = {
+	boxGame: document.getElementById("boxGame"),
 	amountSquare: 400,
+	squareAll: document.getElementsByClassName("squareEmpty"),
+	squareEmpty: [],
+	squareBorder: [],
 
 	buttonStart: document.getElementById("83"),
 	buttonPause: document.getElementById("80"),
@@ -18,9 +22,6 @@ let viewModel = {
 	startGameValue: false,
 	pauseGameValue: false,
 	controlButtonValue: false,
-
-	eventKey: null,
-	activeKey: null,
 
 	startGame: function () {
 		if (this.startGameValue) {
@@ -42,8 +43,28 @@ let viewModel = {
 
 			this.controlButtonValue = true;
 
-			gameModel.loadGame();
+			if (this.renderArena()) {
+				gameModel.loadGame();
+			}
 		}
+	},
+
+	renderArena: function () {
+		for (let i = 0; i < this.amountSquare; i++) {
+			let div = document.createElement("div");
+			div.classList.add("squareEmpty");
+			div.textContent = i; // for count. this is temperarily!
+			if (i <= 20 || (i % 20) == 19 || (i % 20) == 0 || i >= (this.amountSquare - 20)) {
+				div.classList.add("squareBorder");
+				this.squareBorder.push(i);
+			} else {
+				this.squareEmpty.push(i);
+			}
+			this.boxGame.append(div);
+		}
+		/*console.log("squareEmpty: " + this.squareEmpty);
+		console.log("squareBorder: " + this.squareBorder);*/
+		return true;		
 	},
 
 	pauseGame: function () {
@@ -62,43 +83,100 @@ let viewModel = {
 		}
 	},
 
-	pressConBut: function (controlButton) {
-		console.log(controlButton);
-		viewModel.eventKey = controlButton;
-
-		if (controlButton == 37) {
-			this.buttonLeft.classList.add("buttonActive");
-			this.buttonRight.classList.remove("buttonActive");
-			this.buttonUp.classList.remove("buttonActive");
-			this.buttonDown.classList.remove("buttonActive");
-		} else if (controlButton == 39) {
-			this.buttonLeft.classList.remove("buttonActive");
-			this.buttonRight.classList.add("buttonActive");
-			this.buttonUp.classList.remove("buttonActive");
-			this.buttonDown.classList.remove("buttonActive");
-		} else if (controlButton == 38) {
-			this.buttonLeft.classList.remove("buttonActive");
-			this.buttonRight.classList.remove("buttonActive");
-			this.buttonUp.classList.add("buttonActive");
-			this.buttonDown.classList.remove("buttonActive");
-		} else if (controlButton == 40) {
-			this.buttonLeft.classList.remove("buttonActive");
-			this.buttonRight.classList.remove("buttonActive");
-			this.buttonUp.classList.remove("buttonActive");
-			this.buttonDown.classList.add("buttonActive");
+	gameOver: function (message) {
+		console.log("GAME OVER! " + message);
+		if (this.pauseGameValue == false) {
+			this.pauseGame();
 		}
-	}
+		this.buttonsControlCenter.style.display = "none";
+	},
 
 }
 
-let gameModel = {
+let snake = {
 	startSnakeLength: 3,
+	startPosition: 184,
+	position: [],
+}
+
+let food = {
+	amountOnArena: 1,
+	startPosition: 150,
+	position: undefined,
+}
+
+let gameModel = {
+	
+	eventKey: null,
+	activeKey: null,
 
 	loadGame: function() {
 		console.log("LOAD GAME!");
+		this.renderSnakeStart();
+	},
 
-		viewModel.spanScore.innerHTML = this.startSnakeLength;
-	}
+	renderSnakeStart: function () {
+		for (let i = 0; i < snake.startSnakeLength; i++) {
+			if (i == 0) {
+				snake.position[i] = snake.startPosition;
+			} else {
+				snake.position[i] = snake.position[i - 1] - 1;
+			}
+		}
+		if (this.checkPositionSnake(snake.position)) {
+			this.renderSnake();
+		}
+	},
+
+	checkPositionSnake: function (positionSnake) {
+		let snakeOnBorder = viewModel.squareBorder.filter(el => positionSnake.indexOf(el) > -1);
+		
+		if (snakeOnBorder.length != 0) {
+			viewModel.gameOver("Snake on the border: " + snakeOnBorder);
+			return false;
+		} else {
+			return true;
+		}
+	},
+
+	renderSnake: function () {
+		viewModel.spanScore.innerHTML = snake.startSnakeLength;
+
+		viewModel.squareAll[snake.position[0]].classList.add("snakeHead");
+		for (let i = 1; i < snake.position.length; i++) {
+			viewModel.squareAll[snake.position[i]].classList.add("snakeBody");
+		}
+	},
+
+	directionSnake: function (controlButton) {
+		this.eventKey = controlButton;
+
+		if (controlButton == 37) {
+			console.log("LEFT - " + controlButton);
+			viewModel.buttonLeft.classList.add("buttonActive");
+			viewModel.buttonRight.classList.remove("buttonActive");
+			viewModel.buttonUp.classList.remove("buttonActive");
+			viewModel.buttonDown.classList.remove("buttonActive");
+		} else if (controlButton == 39) {
+			console.log("RIGHT - " + controlButton);
+			viewModel.buttonLeft.classList.remove("buttonActive");
+			viewModel.buttonRight.classList.add("buttonActive");
+			viewModel.buttonUp.classList.remove("buttonActive");
+			viewModel.buttonDown.classList.remove("buttonActive");
+		} else if (controlButton == 38) {
+			console.log("UP - " + controlButton);
+			viewModel.buttonLeft.classList.remove("buttonActive");
+			viewModel.buttonRight.classList.remove("buttonActive");
+			viewModel.buttonUp.classList.add("buttonActive");
+			viewModel.buttonDown.classList.remove("buttonActive");
+		} else if (controlButton == 40) {
+			console.log("DOWN - " + controlButton);
+			viewModel.buttonLeft.classList.remove("buttonActive");
+			viewModel.buttonRight.classList.remove("buttonActive");
+			viewModel.buttonUp.classList.remove("buttonActive");
+			viewModel.buttonDown.classList.add("buttonActive");
+		}
+	},
 }
 
 // ============================================
@@ -106,29 +184,6 @@ let gameModel = {
 // ============================================
 
 function init() {
-	// ============================================
-	// RENDER OF ARENA
-	// ============================================
-
-	const boxGame = document.getElementById("boxGame");
-	const w = document.getElementById("w");
-	const h = document.getElementById("h");
-	const { width, height } = boxGame.getBoundingClientRect();
-
-	w.innerHTML = width;
-	h.innerHTML = height;
-
-	for (let i = 1; i <= viewModel.amountSquare; i++) {
-
-		let div = document.createElement("div");
-		div.classList.add("squareEmpty");
-		div.textContent = i; // for count. this is temperarily!
-		boxGame.append(div);
-		console.log(i);
-	}
-
-	// ============================================
-
 	// ============================================
 	// CONTROL
 	// ============================================
@@ -149,7 +204,7 @@ function init() {
 		if (key === 83) {
 			viewModel.startGame();
 		} else if (viewModel.controlButtonValue && (key === 37 || key === 39 || key === 38 || key === 40)) {
-			viewModel.pressConBut(key);
+			gameModel.directionSnake(key);
 		} else if (viewModel.startGameValue && key === 80) {
 			viewModel.pauseGame();
 		}

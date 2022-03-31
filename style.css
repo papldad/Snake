@@ -5,7 +5,7 @@
 	--line: #909079;
 
 	--snakeHead: #B6FF00;
-	--snake: #61EAA0;
+	--snakeBody: #61EAA0;
 	--food: #980B10;
 }
 
@@ -40,10 +40,6 @@ html, body {
 	background-color: var(--bg);
 }
 
-.temp {
-	position: absolute;
-}
-
 #boxGame {
 	margin: 0 auto;
 
@@ -58,17 +54,21 @@ html, body {
 	align-content: flex-start;
 
 	background-color: var(--bg);
-
-	/*border: 10px green solid;*/
 }
 
 .squareEmpty {
 	width: 5%;
 	height: 5%;
 
-	font-size: 0.5em;
+	font-size: 0.9em;
 
-	border: 0.1em red solid;
+	border: 0.1em var(--line) solid;
+}
+
+.squareBorder {
+	color: var(--bg);
+
+	background-color: var(--line);
 }
 
 #boxControl {
@@ -125,4 +125,18 @@ html, body {
 
 #buttonsControlRight {
 	display: none;
+}
+
+.snakeHead {
+
+	background-color: var(--snakeHead);
+}
+
+.snakeBody {
+
+	background-color: var(--snakeBody);
+}
+
+.food {
+	background-color: var(--food);
 }
