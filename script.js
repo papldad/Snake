@@ -1,3 +1,4 @@
+const version = "v1.1.9";
 const versionInfo = document.getElementById("versionInfo");
 
 let viewModel = {
@@ -216,7 +217,6 @@ let gameModel = {
 
 function init() {
 	// ============================================
-	const version = "v1.1.7";
 	versionInfo.innerHTML = version;
 	// ============================================
 
@@ -224,9 +224,17 @@ function init() {
 	// fix user-scalable=no for ios
 	// ============================================
 
+	/*document.addEventListener('touchmove', function (event) {
+		if (event.scale !== 1) {
+			event.preventDefault(); 
+		}
+	}, false);*/
+
 	document.addEventListener('touchmove', function (event) {
-		if (event.scale !== 1) { event.preventDefault(); }
-	}, false);
+		if (event.scale !== 1) { 
+			event.preventDefault(); 
+		}
+	}, { passive: false });
 
 	// ============================================
 
