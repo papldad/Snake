@@ -115,7 +115,10 @@ let gameModel = {
 	activeKey: null,
 
 	loadGame: function() {
-		this.spawnSnake();
+		if (this.spawnSnake()) {
+			viewModel.spanScore.innerHTML = snake.position.length;
+			this.renderSnake();
+		}
 	},
 
 	spawnSnake: function () {
@@ -123,9 +126,7 @@ let gameModel = {
 		for (let i = 1; i < snake.startSnakeLength; i++) {
 			snake.position[i] = snake.position[i - 1] - 1;
 		}
-
-		viewModel.spanScore.innerHTML = snake.position.length;
-		this.renderSnake();
+		return true;
 	},
 
 	renderSnake: function () {
@@ -160,6 +161,7 @@ let gameModel = {
 
 		if (controlButton == 37) {
 			console.log("LEFT - " + controlButton);
+
 			viewModel.buttonLeft.classList.add("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
@@ -168,6 +170,7 @@ let gameModel = {
 			snake.position[0] = snake.position[0] - 1;
 		} else if (controlButton == 39) {
 			console.log("RIGHT - " + controlButton);
+
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.add("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
@@ -177,6 +180,7 @@ let gameModel = {
 
 		} else if (controlButton == 38) {
 			console.log("UP - " + controlButton);
+
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.add("buttonActive");
@@ -185,6 +189,7 @@ let gameModel = {
 			snake.position[0] = snake.position[0] - 20;
 		} else if (controlButton == 40) {
 			console.log("DOWN - " + controlButton);
+
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
@@ -197,7 +202,7 @@ let gameModel = {
 			viewModel.squareAll[oldPositionSnake[i]].classList.remove("snakeBody");
 			snake.position[i] = oldPositionSnake[i - 1];
 		}
-		this.renderSnake(snake.position);
+		this.renderSnake();
 	},
 }
 
@@ -206,6 +211,11 @@ let gameModel = {
 // ============================================
 
 function init() {
+
+	document.addEventListener('touchmove', function (event) {
+		if (event.scale !== 1) { event.preventDefault(); }
+	}, false);
+	
 	// ============================================
 	// CONTROL
 	// ============================================
