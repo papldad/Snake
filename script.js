@@ -1,4 +1,4 @@
-const version = "v1.1.9";
+const version = "v1.1.10-1";
 const versionInfo = document.getElementById("versionInfo");
 
 let viewModel = {
@@ -230,11 +230,15 @@ function init() {
 		}
 	}, false);*/
 
-	document.addEventListener('touchmove', function (event) {
-		if (event.scale !== 1) { 
-			event.preventDefault(); 
-		}
-	}, { passive: false });
+	window.addEventListener(
+    		"touchmove",
+    		function(event) {
+        	if (event.scale !== 1) {
+           	 event.preventDefault();
+        	}
+   		 },
+   	 		{ passive: false }
+	);
 
 	// ============================================
 
