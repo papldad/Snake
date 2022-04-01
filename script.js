@@ -18,6 +18,8 @@ let viewModel = {
 
 	scoreInfo: document.getElementById("scoreInfo"),
 	spanScore: document.getElementById("spanScore"),
+	statusInfo: document.getElementById("statusInfo"),
+	spanStatus: document.getElementById("spanStatus"),
 
 	startGameValue: false,
 	pauseGameValue: false,
@@ -53,7 +55,7 @@ let viewModel = {
 		for (let i = 0; i < this.amountSquare; i++) {
 			let div = document.createElement("div");
 			div.classList.add("squareEmpty");
-			div.textContent = i; // for count. this is temperarily!
+			/*div.textContent = i; // for count. this is temperarily!*/
 			if (i <= 20 || (i % 20) == 19 || (i % 20) == 0 || i >= (this.amountSquare - 20)) {
 				div.classList.add("squareBorder");
 				this.squareBorder.push(i);
@@ -84,18 +86,19 @@ let viewModel = {
 	},
 
 	gameOver: function (message) {
-		console.log("GAME OVER! " + message);
 		if (this.pauseGameValue == false) {
 			this.pauseGame();
 		}
 		this.buttonsControlCenter.style.display = "none";
+		this.statusInfo.style.display = "block";
+		this.spanStatus.innerHTML = "GAME OVER! " + message;
 	},
 
 }
 
 let snake = {
-	startSnakeLength: 3,
-	startPosition: 184,
+	startSnakeLength: 5,
+	startPosition: 190,
 	position: [],
 }
 
@@ -112,44 +115,48 @@ let gameModel = {
 
 	loadGame: function() {
 		console.log("LOAD GAME!");
-		this.renderSnakeStart();
+		this.spawnSnake();
 	},
 
-	renderSnakeStart: function () {
-		for (let i = 0; i < snake.startSnakeLength; i++) {
-			if (i == 0) {
-				snake.position[i] = snake.startPosition;
-			} else {
-				snake.position[i] = snake.position[i - 1] - 1;
-			}
+	spawnSnake: function () {
+		snake.position[0] = snake.startPosition;
+		for (let i = 1; i < snake.startSnakeLength; i++) {
+			snake.position[i] = snake.position[i - 1] - 1;
 		}
-		if (this.checkPositionSnake(snake.position)) {
-			this.renderSnake();
+
+		viewModel.spanScore.innerHTML = snake.position.length;
+		this.renderSnake();
+	},
+
+	renderSnake: function () {
+		viewModel.squareAll[snake.position[0]].classList.add("snakeHead");
+		for (let i = 1; i < snake.position.length; i++) {
+			viewModel.squareAll[snake.position[i]].classList.add("snakeBody");
 		}
+		this.checkPositionSnake(snake.position);
 	},
 
 	checkPositionSnake: function (positionSnake) {
+		for (let x = 1; x < positionSnake.length; x++) {
+			if (positionSnake[0] == positionSnake[x]) {
+				viewModel.gameOver("Head Snake ate body.");
+				return false;
+			}
+		}
+
 		let snakeOnBorder = viewModel.squareBorder.filter(el => positionSnake.indexOf(el) > -1);
 		
 		if (snakeOnBorder.length != 0) {
-			viewModel.gameOver("Snake on the border: " + snakeOnBorder);
+			viewModel.gameOver("Snake on the border.");
 			return false;
 		} else {
 			return true;
 		}
 	},
 
-	renderSnake: function () {
-		viewModel.spanScore.innerHTML = snake.startSnakeLength;
-
-		viewModel.squareAll[snake.position[0]].classList.add("snakeHead");
-		for (let i = 1; i < snake.position.length; i++) {
-			viewModel.squareAll[snake.position[i]].classList.add("snakeBody");
-		}
-	},
-
 	directionSnake: function (controlButton) {
 		this.eventKey = controlButton;
+		let oldPositionSnake = snake.position.slice();
 
 		if (controlButton == 37) {
 			console.log("LEFT - " + controlButton);
@@ -157,25 +164,40 @@ let gameModel = {
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
 			viewModel.buttonDown.classList.remove("buttonActive");
+
+			snake.position[0] = snake.position[0] - 1;
 		} else if (controlButton == 39) {
 			console.log("RIGHT - " + controlButton);
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.add("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
 			viewModel.buttonDown.classList.remove("buttonActive");
+
+			snake.position[0] = snake.position[0] + 1;
+
 		} else if (controlButton == 38) {
 			console.log("UP - " + controlButton);
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.add("buttonActive");
 			viewModel.buttonDown.classList.remove("buttonActive");
+
+			snake.position[0] = snake.position[0] - 20;
 		} else if (controlButton == 40) {
 			console.log("DOWN - " + controlButton);
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
 			viewModel.buttonUp.classList.remove("buttonActive");
 			viewModel.buttonDown.classList.add("buttonActive");
+
+			snake.position[0] = snake.position[0] + 20;
 		}
+		viewModel.squareAll[oldPositionSnake[0]].classList.remove("snakeHead");
+		for (let i = 1; i < snake.position.length; i++) {
+			viewModel.squareAll[oldPositionSnake[i]].classList.remove("snakeBody");
+			snake.position[i] = oldPositionSnake[i - 1];
+		}
+		this.renderSnake(snake.position);
 	},
 }
 

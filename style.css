@@ -62,7 +62,7 @@ html, body {
 
 	font-size: 0.9em;
 
-	border: 0.1em var(--line) solid;
+	/*border: 0.1em var(--line) solid;*/
 }
 
 .squareBorder {
@@ -83,7 +83,7 @@ html, body {
 	background-color: var(--bg);
 }
 
-#scoreInfo p {
+#boxInfo p {
 	font-size: 4vh;
 	text-transform: uppercase;
 	font-weight: 700;
@@ -115,6 +115,10 @@ html, body {
 	display: none;
 }
 
+#statusInfo {
+	display: none;
+}
+
 #buttonsControlLeft {
 	display: none;
 }
@@ -127,16 +131,17 @@ html, body {
 	display: none;
 }
 
-.snakeHead {
-
-	background-color: var(--snakeHead);
-}
-
 .snakeBody {
 
 	background-color: var(--snakeBody);
 }
 
+.snakeHead {
+
+	background-color: var(--snakeHead);
+}
+
 .food {
+
 	background-color: var(--food);
 }
