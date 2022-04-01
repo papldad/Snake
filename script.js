@@ -91,7 +91,8 @@ let viewModel = {
 		}
 		this.buttonsControlCenter.style.display = "none";
 		this.statusInfo.style.display = "block";
-		this.spanStatus.innerHTML = "GAME OVER! " + message;
+		this.spanStatus.style.color = "var(--food)";
+		this.spanStatus.innerHTML = "Game Over! " + message;
 	},
 
 }
@@ -114,7 +115,6 @@ let gameModel = {
 	activeKey: null,
 
 	loadGame: function() {
-		console.log("LOAD GAME!");
 		this.spawnSnake();
 	},
 

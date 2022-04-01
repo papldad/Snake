@@ -84,9 +84,13 @@ html, body {
 }
 
 #boxInfo p {
-	font-size: 4vh;
+	font-size: 3vh;
 	text-transform: uppercase;
 	font-weight: 700;
+}
+
+#spanScore {
+	color: var(--snakeBody);
 }
 
 .button {
