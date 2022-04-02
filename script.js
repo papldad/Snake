@@ -1,4 +1,4 @@
-const version = "v1.1.13";
+const version = "v1.1.14";
 const versionInfo = document.getElementById("versionInfo");
 
 let viewModel = {
@@ -46,7 +46,7 @@ let viewModel = {
 			this.buttonsControlCenter.style.display = "block";
 			this.buttonsControlRight.style.display = "block";
 
-			this.buttonStart.innerHTML = "Restart";
+			this.buttonStart.textContent = "Restart";
 
 			this.controlButtonValue = true;
 
@@ -97,20 +97,19 @@ let viewModel = {
 		this.buttonsControlCenter.style.display = "none";
 		this.statusInfo.style.display = "block";
 		this.spanStatus.style.color = "var(--food)";
-		this.spanStatus.innerHTML = "Game Over! " + message;
+		this.spanStatus.textContent = "Game Over! " + message;
 	},
 
 }
 
 let snake = {
-	startSnakeLength: 5,
+	startSnakeLength: 4,
 	startPosition: 190,
 	position: [],
 }
 
 let food = {
 	amountOnArena: 1,
-	startPosition: 150,
 	position: undefined,
 }
 
@@ -121,8 +120,9 @@ let gameModel = {
 
 	loadGame: function() {
 		if (this.spawnSnake()) {
-			viewModel.spanScore.innerHTML = snake.position.length;
+			viewModel.spanScore.textContent = snake.position.length;
 			this.renderSnake();
+			this.spawnFood();
 		}
 	},
 
@@ -131,6 +131,7 @@ let gameModel = {
 		for (let i = 1; i < snake.startSnakeLength; i++) {
 			snake.position[i] = snake.position[i - 1] - 1;
 		}
+		this.eventKey = 39;
 		return true;
 	},
 
@@ -141,6 +142,22 @@ let gameModel = {
 		}
 		this.checkPositionSnake(snake.position);
 	},
+
+	spawnFood: function () {
+		if (food.position !== undefined) {
+			viewModel.squareAll[food.position].classList.remove("food");
+		}
+
+		function diff(a1, a2) {
+			return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
+		}
+		let allowedNumber = diff(viewModel.squareEmpty, snake.position);
+
+		var rand = Math.floor(Math.random() * allowedNumber.length);
+		food.position = allowedNumber[rand];
+
+		viewModel.squareAll[food.position].classList.add("food");
+	}, 
 
 	checkPositionSnake: function (positionSnake) {
 		for (let x = 1; x < positionSnake.length; x++) {
@@ -155,13 +172,26 @@ let gameModel = {
 		if (snakeOnBorder.length != 0) {
 			viewModel.gameOver("Snake on the border.");
 			return false;
+		} else if (positionSnake[0] === food.position) {
+			snake.position.push(snake.position[snake.position.length-1]);
+			viewModel.spanScore.textContent = snake.position.length;
+			this.spawnFood();
 		} else {
 			return true;
 		}
 	},
 
 	directionSnake: function (controlButton) {
-		this.eventKey = controlButton;
+		if (this.eventKey == 37 && controlButton == 39) {
+			controlButton = 37;
+		} else if (this.eventKey == 39 && controlButton == 37) {
+			controlButton = 39;
+		} else if (this.eventKey == 38 && controlButton == 40) {
+			controlButton = 38;
+		} else if (this.eventKey == 40 && controlButton == 38) {
+			controlButton = 40;
+		}
+
 		let oldPositionSnake = snake.position.slice();
 
 		if (controlButton == 37) {
@@ -202,6 +232,9 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] + 20;
 		}
+
+		this.eventKey = controlButton;
+
 		viewModel.squareAll[oldPositionSnake[0]].classList.remove("snakeHead");
 		for (let i = 1; i < snake.position.length; i++) {
 			viewModel.squareAll[oldPositionSnake[i]].classList.remove("snakeBody");
@@ -217,20 +250,7 @@ let gameModel = {
 
 function init() {
 	// ============================================
-	versionInfo.innerHTML = version;
-	// ============================================
-
-	// ============================================
-	// fix user-scalable=no for ios
-	// ============================================
-
-	/*document.addEventListener('touchmove', function(event) {
-		event = event.originalEvent || event;
-		if(event.scale !== 1) {
-			event.preventDefault();
-		} 
-	}, false);*/
-
+	versionInfo.textContent = version;
 	// ============================================
 
 	// ============================================
