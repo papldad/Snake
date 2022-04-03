@@ -1,5 +1,7 @@
-const version = "v1.1.14";
+const version = "v1.2";
 const versionInfo = document.getElementById("versionInfo");
+
+let setAutoMove;
 
 let viewModel = {
 
@@ -81,12 +83,14 @@ let viewModel = {
 			this.buttonsControlLeft.style.display = "block";
 			this.buttonsControlRight.style.display = "block";
 			this.controlButtonValue = true;
+			gameModel.autoMove();
 		} else {
 			this.pauseGameValue = true;
 			this.buttonPause.classList.add("buttonActive");
 			this.buttonsControlLeft.style.display = "none";
 			this.buttonsControlRight.style.display = "none";
 			this.controlButtonValue = false;
+			clearInterval(setAutoMove);
 		}
 	},
 
@@ -117,12 +121,14 @@ let gameModel = {
 	
 	eventKey: null,
 	activeKey: null,
+	speedGame: 200,
 
 	loadGame: function() {
 		if (this.spawnSnake()) {
 			viewModel.spanScore.textContent = snake.position.length;
 			this.renderSnake();
 			this.spawnFood();
+			this.autoMove();
 		}
 	},
 
@@ -132,6 +138,7 @@ let gameModel = {
 			snake.position[i] = snake.position[i - 1] - 1;
 		}
 		this.eventKey = 39;
+		this.activeKey = 39;
 		return true;
 	},
 
@@ -181,21 +188,26 @@ let gameModel = {
 		}
 	},
 
-	directionSnake: function (controlButton) {
-		if (this.eventKey == 37 && controlButton == 39) {
-			controlButton = 37;
-		} else if (this.eventKey == 39 && controlButton == 37) {
-			controlButton = 39;
-		} else if (this.eventKey == 38 && controlButton == 40) {
-			controlButton = 38;
-		} else if (this.eventKey == 40 && controlButton == 38) {
-			controlButton = 40;
+	/*eventKey: null,
+	activeKey: null,*/
+
+	directionSnake: function () {
+		if (this.activeKey == 37 && this.eventKey == 39) {
+			this.activeKey = 37;
+		} else if (this.activeKey == 39 && this.eventKey == 37) {
+			this.activeKey = 39;
+		} else if (this.activeKey == 38 && this.eventKey == 40) {
+			this.activeKey = 38;
+		} else if (this.activeKey == 40 && this.eventKey == 38) {
+			this.activeKey = 40;
+		} else {
+			this.activeKey = this.eventKey;
 		}
 
 		let oldPositionSnake = snake.position.slice();
 
-		if (controlButton == 37) {
-			console.log("LEFT - " + controlButton);
+		if (this.activeKey == 37) {
+			console.log("LEFT - " + this.activeKey);
 
 			viewModel.buttonLeft.classList.add("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
@@ -203,8 +215,8 @@ let gameModel = {
 			viewModel.buttonDown.classList.remove("buttonActive");
 
 			snake.position[0] = snake.position[0] - 1;
-		} else if (controlButton == 39) {
-			console.log("RIGHT - " + controlButton);
+		} else if (this.activeKey == 39) {
+			console.log("RIGHT - " + this.activeKey);
 
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.add("buttonActive");
@@ -213,8 +225,8 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] + 1;
 
-		} else if (controlButton == 38) {
-			console.log("UP - " + controlButton);
+		} else if (this.activeKey == 38) {
+			console.log("UP - " + this.activeKey);
 
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
@@ -222,8 +234,8 @@ let gameModel = {
 			viewModel.buttonDown.classList.remove("buttonActive");
 
 			snake.position[0] = snake.position[0] - 20;
-		} else if (controlButton == 40) {
-			console.log("DOWN - " + controlButton);
+		} else if (this.activeKey == 40) {
+			console.log("DOWN - " + this.activeKey);
 
 			viewModel.buttonLeft.classList.remove("buttonActive");
 			viewModel.buttonRight.classList.remove("buttonActive");
@@ -233,14 +245,16 @@ let gameModel = {
 			snake.position[0] = snake.position[0] + 20;
 		}
 
-		this.eventKey = controlButton;
-
 		viewModel.squareAll[oldPositionSnake[0]].classList.remove("snakeHead");
 		for (let i = 1; i < snake.position.length; i++) {
 			viewModel.squareAll[oldPositionSnake[i]].classList.remove("snakeBody");
 			snake.position[i] = oldPositionSnake[i - 1];
 		}
 		this.renderSnake();
+	},
+
+	autoMove: function () {
+		setAutoMove = setInterval(() => this.directionSnake(), this.speedGame);
 	},
 }
 
@@ -273,7 +287,8 @@ function init() {
 		if (key === 83) {
 			viewModel.startGame();
 		} else if (viewModel.controlButtonValue && (key === 37 || key === 39 || key === 38 || key === 40)) {
-			gameModel.directionSnake(key);
+			/*gameModel.directionSnake(key);*/
+			gameModel.eventKey = key;
 		} else if (viewModel.startGameValue && key === 80) {
 			viewModel.pauseGame();
 		}
