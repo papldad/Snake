@@ -94,6 +94,12 @@ html, body {
 	background-color: var(--bg);
 }
 
+#boxControl p {
+	font-size: 3vh;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
 #versionInfo {
 	display: block;
 
@@ -116,6 +122,19 @@ html, body {
 	font-weight: 700;
 }
 
+.buttonLeft {
+	border-left-color: var(--snakeBody);
+}
+.buttonUp {
+	border-top-color: var(--snakeBody);
+}
+.buttonDown {
+	border-bottom-color: var(--snakeBody);
+}
+.buttonRight {
+	border-right-color: var(--snakeBody);
+}
+
 #buttonStart {
 	width: 30vw;
 }
@@ -123,6 +142,11 @@ html, body {
 .buttonActive {
 	background-color: var(--text);
 	color: var(--bg);
+
+}
+
+.buttonControlActive {
+	background-color: var(--snakeBody);
 
 }
 
