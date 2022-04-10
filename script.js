@@ -6,7 +6,7 @@ let setAutoMove;
 let viewModel = {
 
 	boxGame: document.getElementById("boxGame"),
-	amountSquare: 400, // min 80, max 400
+	amountSquare: 80, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
 	squareEmpty: [],
 	squareBorder: [],
@@ -34,10 +34,6 @@ let viewModel = {
 	controlButtonValue: false,
 	gameOverValue: false,
 	gameWinValue: false,
-
-	animDemo: function () {
-
-	},
 
 	startGame: function () {
 		if (this.startGameValue) {
@@ -290,8 +286,6 @@ function init() {
 	versionInfo.textContent = version;
 	// ============================================
 
-	viewModel.animDemo();
-
 	// ============================================
 	// CONTROL
 	// ============================================
@@ -304,64 +298,80 @@ function init() {
 		});
 	});
 
+	// ============================================
+
 	addEventListener("keydown", function(event) {
 		pressKey(event.keyCode);
 	});
 
+	// ============================================
+
 	var startPoint={};
 	var nowPoint;
 	var ldelay;
+	
 	document.addEventListener('touchstart', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		startPoint.x=event.changedTouches[0].pageX;
-		startPoint.y=event.changedTouches[0].pageY;
-		ldelay=new Date();
+		startPoint.x = event.changedTouches[0].pageX;
+		startPoint.y = event.changedTouches[0].pageY;
+		ldelay = new Date();
 	}, false);
+
 	/*Ловим движение пальцем*/
 	document.addEventListener('touchmove', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		var otk={};
-		nowPoint=event.changedTouches[0];
-		otk.x=nowPoint.pageX-startPoint.x;
+		var otk = {};
+		nowPoint = event.changedTouches[0];
+		otk.x = nowPoint.pageX - startPoint.x;
 		/*Обработайте данные*/
 		/*Для примера*/
-		if(Math.abs(otk.x)>200){
-		if(otk.x<0){/*СВАЙП ВЛЕВО(ПРЕД.СТРАНИЦА)*/}
-	if(otk.x>0){/*СВАЙП ВПРАВО(СЛЕД.СТРАНИЦА)*/}
-		startPoint={x:nowPoint.pageX,y:nowPoint.pageY};
-}
-}, false);
+		if (Math.abs(otk.x) > 200) {
+			if (otk.x < 0) {
+				/*СВАЙП ВЛЕВО(ПРЕД.СТРАНИЦА)*/
+			}
+			if (otk.x > 0) {
+				/*СВАЙП ВПРАВО(СЛЕД.СТРАНИЦА)*/
+			}
+			startPoint = {
+				x:nowPoint.pageX,y:nowPoint.pageY
+			};
+		}
+	}, false);
+
 	/*Ловим отпускание пальца*/
+
 	document.addEventListener('touchend', function(event) {
-		var pdelay=new Date();
-		nowPoint=event.changedTouches[0];
+		var pdelay = new Date();
+		nowPoint = event.changedTouches[0];
 		var xAbs = Math.abs(startPoint.x - nowPoint.pageX);
 		var yAbs = Math.abs(startPoint.y - nowPoint.pageY);
-		if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime())<200) {
+		if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime()) < 200) {
 			if (xAbs > yAbs) {
-				if (nowPoint.pageX < startPoint.x){
+				if (nowPoint.pageX < startPoint.x) {
 					console.log("влево");
 					pressKey(37);
 				}
-				else{
+				else {
 					console.log("право");
 					pressKey(39);
 				}
 			}
 			else {
-				if (nowPoint.pageY < startPoint.y){
+				if (nowPoint.pageY < startPoint.y) {
 					console.log("вверх");
 					pressKey(38);
 				}
-				else{
+				else {
 					console.log("вниз");
 					pressKey(40);
 				}
 			}
 		}
 	}, false);
+
+	// ============================================
 
 	function pressKey(key) {
 		if (key === 83) {
@@ -378,13 +388,13 @@ function init() {
 
 window.onload = init;
 
-var treshold = 10; // пороговое значение (если расстояние тача больше него, значит у нас свайп, а не клик)
+/*var treshold = 10; // пороговое значение (если расстояние тача больше него, значит у нас свайп, а не клик)
 var touchStart = { // тут храним начальные координаты тача
 	x: 0,
 	y: 0
 };
 
-/*const slider = document.getElementById("boxGame");
+const slider = document.getElementById("boxGame");
 let startPoint;
 let moved = false;
 function touch(e) {

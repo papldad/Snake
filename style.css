@@ -92,33 +92,29 @@ html, body {
 }
 
 #splashScreen {
-
+	position: relative;
+	width: 100%;
 	color: var(--snakeHead);
-	font-size: 300%;
 }
 
 #splashWord {
+	position: absolute;
 
+	animation: moveWord 3s linear infinite alternate;
+
+	font-size: 300%;
 }
 
-/*#letterS {
-	display: inline-block;
-}
-
-.animLetterFirst {
-	animation: moveUpLeft 1.5s ease-out;
-	transform-origin: bottom left;
-}
-
-@keyframes moveUpLeft {
-	0%, 100% {
-		transform: rotate(0deg);
+@keyframes moveWord {
+	0% {
+		left: 0;
 	}
 
-	30%, 60% {
-		transform: rotate(-45deg);
+	100% {
+		left: 100%;
+		transform:translateX(-100%);
 	}
-}*/
+}
 
 #settings {
 
