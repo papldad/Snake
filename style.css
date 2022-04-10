@@ -29,6 +29,8 @@ html, body {
 }
 
 #containerGame {
+	position: fixed; /*NEED????!!!!*/
+
 	width: 100vw;
 	height: 100vh;
 
@@ -99,8 +101,9 @@ html, body {
 
 #splashWord {
 	position: absolute;
+	display: block;
 
-	animation: moveWord 3s linear infinite alternate;
+	animation: moveWord 2s linear infinite alternate;
 
 	font-size: 300%;
 }
@@ -112,7 +115,7 @@ html, body {
 
 	100% {
 		left: 100%;
-		transform:translateX(-100%);
+		transform: translateX(-100%);
 	}
 }
 
