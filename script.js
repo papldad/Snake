@@ -6,10 +6,12 @@ let setAutoMove;
 let viewModel = {
 
 	boxGame: document.getElementById("boxGame"),
-	amountSquare: 400,
+	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
 	squareEmpty: [],
 	squareBorder: [],
+
+	demo: document.getElementById("demo"),
 
 	buttonStart: document.getElementById("83"),
 	buttonPause: document.getElementById("80"),
@@ -33,6 +35,9 @@ let viewModel = {
 	gameOverValue: false,
 	gameWinValue: false,
 
+	animDemo: function () {
+
+	},
 
 	startGame: function () {
 		if (this.startGameValue) {
@@ -45,7 +50,7 @@ let viewModel = {
 			}
 		} else {
 			this.startGameValue = true;
-			versionInfo.style.display = "none";
+			this.demo.style.display = "none";
 			this.scoreInfo.style.display = "block";
 			this.buttonsControlLeft.style.display = "block";
 			this.buttonsControlCenter.style.display = "block";
@@ -123,9 +128,9 @@ let viewModel = {
 
 let snake = {
 	startSnakeLength: 4,
-	startPosition: 190,
+	startPosition: 30,
 	position: [],
-	maxSnakeLength: 50,
+	maxSnakeLength: 50, // should be max 324, because emptySquare = 324
 }
 
 let food = {
@@ -198,9 +203,9 @@ let gameModel = {
 		} else if (positionSnake[0] === food.position) {
 			snake.position.push(snake.position[snake.position.length-1]);
 			viewModel.spanScore.textContent = snake.position.length;
-			if (snake.position.length == snake.maxSnakeLength) {
+			if (snake.position.length == snake.maxSnakeLength || snake.position.length >= viewModel.squareEmpty.length) {
 				viewModel.squareAll[food.position].classList.remove("food");
-				viewModel.gameWin("Congratulations!");
+				viewModel.gameWin("Congratulations! You are the biggest snake!");
 			} else {
 				this.spawnFood();
 			}
@@ -225,7 +230,7 @@ let gameModel = {
 		let oldPositionSnake = snake.position.slice();
 
 		if (this.activeKey == 37) {
-			console.log("LEFT - " + this.activeKey);
+			/*console.log("LEFT - " + this.activeKey);*/
 
 			viewModel.buttonLeft.classList.add("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
@@ -234,7 +239,7 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] - 1;
 		} else if (this.activeKey == 39) {
-			console.log("RIGHT - " + this.activeKey);
+			/*console.log("RIGHT - " + this.activeKey);*/
 
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.add("buttonControlActive");
@@ -244,7 +249,7 @@ let gameModel = {
 			snake.position[0] = snake.position[0] + 1;
 
 		} else if (this.activeKey == 38) {
-			console.log("UP - " + this.activeKey);
+			/*console.log("UP - " + this.activeKey);*/
 
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
@@ -253,7 +258,7 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] - 20;
 		} else if (this.activeKey == 40) {
-			console.log("DOWN - " + this.activeKey);
+			/*console.log("DOWN - " + this.activeKey);*/
 
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
@@ -284,6 +289,8 @@ function init() {
 	// ============================================
 	versionInfo.textContent = version;
 	// ============================================
+
+	viewModel.animDemo();
 
 	// ============================================
 	// CONTROL
