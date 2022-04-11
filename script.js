@@ -1,4 +1,4 @@
-const version = "v1.4.6";
+const version = "v1.4.7";
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
