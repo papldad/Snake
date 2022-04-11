@@ -1,17 +1,22 @@
-const version = "v1.4.4";
+const version = "v1.4.5";
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
 
+let demoModel = {
+
+	demo: document.getElementById("demo"),
+
+}
+
 let viewModel = {
 
+	containerGame: document.getElementById("containerGame"),
 	boxGame: document.getElementById("boxGame"),
 	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
 	squareEmpty: [],
 	squareBorder: [],
-
-	demo: document.getElementById("demo"),
 
 	buttonStart: document.getElementById("83"),
 	buttonPause: document.getElementById("80"),
@@ -46,7 +51,7 @@ let viewModel = {
 			}
 		} else {
 			this.startGameValue = true;
-			this.demo.style.display = "none";
+			demoModel.demo.style.display = "none";
 			this.scoreInfo.style.display = "block";
 			this.buttonsControlLeft.style.display = "block";
 			this.buttonsControlCenter.style.display = "block";
@@ -310,7 +315,7 @@ function init() {
 	var nowPoint;
 	var ldelay;
 	
-	viewModel.boxGame.addEventListener('touchstart', function(event) {
+	viewModel.containerGame.addEventListener('touchstart', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		startPoint.x = event.changedTouches[0].pageX;
@@ -319,7 +324,7 @@ function init() {
 	}, false);
 
 	/*Ловим движение пальцем*/
-	viewModel.boxGame.addEventListener('touchmove', function(event) {
+	viewModel.containerGame.addEventListener('touchmove', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var otk = {};
@@ -341,7 +346,7 @@ function init() {
 	}, false);
 
 	/*Ловим отпускание пальца*/
-	viewModel.boxGame.addEventListener('touchend', function(event) {
+	viewModel.containerGame.addEventListener('touchend', function(event) {
 		var pdelay = new Date();
 		nowPoint = event.changedTouches[0];
 		var xAbs = Math.abs(startPoint.x - nowPoint.pageX);
@@ -349,21 +354,21 @@ function init() {
 		if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime()) < 200) {
 			if (xAbs > yAbs) {
 				if (nowPoint.pageX < startPoint.x) {
-					console.log("влево");
+					/*console.log("влево");*/
 					pressKey(37);
 				}
 				else {
-					console.log("право");
+					/*console.log("право");*/
 					pressKey(39);
 				}
 			}
 			else {
 				if (nowPoint.pageY < startPoint.y) {
-					console.log("вверх");
+					/*console.log("вверх");*/
 					pressKey(38);
 				}
 				else {
-					console.log("вниз");
+					/*console.log("вниз");*/
 					pressKey(40);
 				}
 			}

@@ -21,18 +21,15 @@
 	padding: 0;
 	box-sizing: border-box;
 
-	/*touch-action: manipulation;*/ /*feat: off zoom for ios*/
+	touch-action: manipulation; /*feat: off zoom for ios*/
 }
 
 html, body {
-	touch-action: manipulation;
-	position: fixed;
-
 	background-color: var(--bg);
 }
 
 #containerGame {
-	/*position: fixed;*/ /*fix: fixed page*/
+	position: fixed; /*fix: fixed page*/
 
 	width: 100vw;
 	height: 100vh;
@@ -97,11 +94,9 @@ html, body {
 }
 
 #splashScreen {
-	align-self: stretch;
+	width: 100%;
 	position: relative;
 	color: var(--snakeHead);
-
-	border: 2px red solid;
 }
 
 #splashWord {
@@ -111,18 +106,17 @@ html, body {
 	-webkit-animation: moveWord 2s linear infinite alternate;
 
 	font-size: 6vh;
-
-	border: 2px red solid;
 }
 
 @keyframes moveWord {
 	0% {
-		left: 0;
+		right: 0;
+
 	}
 
 	100% {
-		left: 100%;
-		transform: translateX(-100%);
+		right: 100%;
+		transform: translateX(100%);
 	}
 }
 
