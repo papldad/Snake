@@ -25,6 +25,8 @@
 }
 
 html, body {
+	-webkit-text-size-adjust: none; /*Отключает масштабирование текста в горизонтальной ориентации.*/
+
 	background-color: var(--bg);
 }
 
@@ -102,6 +104,8 @@ html, body {
 #splashWord {
 	position: absolute;
 
+	display: inline-block;
+
 	animation: moveWord 2s linear infinite alternate;
 	-webkit-animation: moveWord 2s linear infinite alternate;
 
@@ -117,6 +121,7 @@ html, body {
 	100% {
 		right: 100%;
 		transform: translateX(100%);
+		-webkit-transform: translateX(100%);
 	}
 }
 

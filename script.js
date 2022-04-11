@@ -1,4 +1,4 @@
-const version = "v1.4.5";
+const version = "v1.4.6";
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -11,7 +11,6 @@ let demoModel = {
 
 let viewModel = {
 
-	containerGame: document.getElementById("containerGame"),
 	boxGame: document.getElementById("boxGame"),
 	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
@@ -315,7 +314,7 @@ function init() {
 	var nowPoint;
 	var ldelay;
 	
-	viewModel.containerGame.addEventListener('touchstart', function(event) {
+	viewModel.boxGame.addEventListener('touchstart', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		startPoint.x = event.changedTouches[0].pageX;
@@ -324,7 +323,7 @@ function init() {
 	}, false);
 
 	/*Ловим движение пальцем*/
-	viewModel.containerGame.addEventListener('touchmove', function(event) {
+	viewModel.boxGame.addEventListener('touchmove', function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		var otk = {};
@@ -346,7 +345,7 @@ function init() {
 	}, false);
 
 	/*Ловим отпускание пальца*/
-	viewModel.containerGame.addEventListener('touchend', function(event) {
+	viewModel.boxGame.addEventListener('touchend', function(event) {
 		var pdelay = new Date();
 		nowPoint = event.changedTouches[0];
 		var xAbs = Math.abs(startPoint.x - nowPoint.pageX);
