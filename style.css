@@ -106,8 +106,8 @@ html, body {
 
 	display: inline-block;
 
-	animation: moveWord 2s linear infinite alternate;
 	-webkit-animation: moveWord 2s linear infinite alternate;
+	animation: moveWord 2s linear infinite alternate;
 
 	font-size: 6vh;
 }
@@ -120,8 +120,9 @@ html, body {
 
 	100% {
 		right: 100%;
-		transform: translateX(100%);
+		
 		-webkit-transform: translateX(100%);
+		transform: translateX(100%);
 	}
 }
 
