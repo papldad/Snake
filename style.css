@@ -96,24 +96,24 @@ html, body {
 }
 
 #splashScreen {
-	width: 100%;
-	position: relative;
+	/*width: 100%;
+	position: relative;*/
 	color: var(--snakeHead);
 }
 
 #splashWord {
-	position: absolute;
+	/*position: absolute;
 
 	-webkit-animation: moveWord 2s linear infinite alternate;
 	animation: moveWord 2s linear infinite alternate;
 
 	-webkit-transform-origin: top right;
-	transform-origin: top right;
+	transform-origin: top right;*/
 
 	font-size: 6vh;
 }
 
-@keyframes moveWord {
+/*@keyframes moveWord {
 	0% {
 		right: 0;
 
@@ -128,7 +128,7 @@ html, body {
 
 		right: 100%;
 	}
-}
+}*/
 
 #settings {
 	font-size: 4vh;

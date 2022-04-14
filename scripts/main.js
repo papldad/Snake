@@ -1,4 +1,4 @@
-const version = "v1.4.7";
+const version = "v1.5"; // learn jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -7,7 +7,13 @@ let demoModel = {
 
 	demo: document.getElementById("demo"),
 
+
 }
+
+/*$("#splashWord").animate({
+	left: "100%",
+	right: "0",
+}, 2000);*/
 
 let viewModel = {
 
