@@ -1,1 +1,1 @@
-# Snake-v2
+# Snake
