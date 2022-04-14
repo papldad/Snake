@@ -1,3 +1,3 @@
-# Snake-v2
+# Snake
 
-### https://papldad.github.io/Snake-v2/
+### https://papldad.github.io/Snake/
