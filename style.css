@@ -178,6 +178,10 @@ html, body {
 	font-size: 2vh;
 }
 
+input {
+	border: 1px red solid;
+}
+
 #versionInfo {
 	font-size: 1vh;
 }

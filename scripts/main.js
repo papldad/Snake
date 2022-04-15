@@ -1,4 +1,4 @@
-const version = "v1.5.1"; // used jquery
+const version = "v1.5.2"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -347,65 +347,71 @@ function init() {
 
 	// ============================================
 
-	var startPoint={};
-	var nowPoint;
-	var ldelay;
+	let startPoint={};
+	let nowPoint;
+	let ldelay;
 	
 	viewModel.boxGame.addEventListener('touchstart', function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		startPoint.x = event.changedTouches[0].pageX;
-		startPoint.y = event.changedTouches[0].pageY;
-		ldelay = new Date();
+		if (viewModel.controlButtonValue) {
+			event.preventDefault();
+			event.stopPropagation();
+			startPoint.x = event.changedTouches[0].pageX;
+			startPoint.y = event.changedTouches[0].pageY;
+			ldelay = new Date();
+		}
 	}, false);
 
 	/*Ловим движение пальцем*/
 	viewModel.boxGame.addEventListener('touchmove', function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		var otk = {};
-		nowPoint = event.changedTouches[0];
-		otk.x = nowPoint.pageX - startPoint.x;
-		/*Обработайте данные*/
-		/*Для примера*/
-		if (Math.abs(otk.x) > 200) {
-			if (otk.x < 0) {
-				/*СВАЙП ВЛЕВО(ПРЕД.СТРАНИЦА)*/
+		if (viewModel.controlButtonValue) {
+			event.preventDefault();
+			event.stopPropagation();
+			let otk = {};
+			nowPoint = event.changedTouches[0];
+			otk.x = nowPoint.pageX - startPoint.x;
+			/*Обработайте данные*/
+			/*Для примера*/
+			if (Math.abs(otk.x) > 200) {
+				if (otk.x < 0) {
+					/*СВАЙП ВЛЕВО(ПРЕД.СТРАНИЦА)*/
+				}
+				if (otk.x > 0) {
+					/*СВАЙП ВПРАВО(СЛЕД.СТРАНИЦА)*/
+				}
+				startPoint = {
+					x:nowPoint.pageX,y:nowPoint.pageY
+				};
 			}
-			if (otk.x > 0) {
-				/*СВАЙП ВПРАВО(СЛЕД.СТРАНИЦА)*/
-			}
-			startPoint = {
-				x:nowPoint.pageX,y:nowPoint.pageY
-			};
 		}
 	}, false);
 
 	/*Ловим отпускание пальца*/
 	viewModel.boxGame.addEventListener('touchend', function(event) {
-		var pdelay = new Date();
-		nowPoint = event.changedTouches[0];
-		var xAbs = Math.abs(startPoint.x - nowPoint.pageX);
-		var yAbs = Math.abs(startPoint.y - nowPoint.pageY);
-		if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime()) < 200) {
-			if (xAbs > yAbs) {
-				if (nowPoint.pageX < startPoint.x) {
-					/*console.log("влево");*/
-					pressKey(37);
+		if (viewModel.controlButtonValue) {
+			let pdelay = new Date();
+			nowPoint = event.changedTouches[0];
+			let xAbs = Math.abs(startPoint.x - nowPoint.pageX);
+			let yAbs = Math.abs(startPoint.y - nowPoint.pageY);
+			if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime()) < 200) {
+				if (xAbs > yAbs) {
+					if (nowPoint.pageX < startPoint.x) {
+						/*console.log("влево");*/
+						pressKey(37);
+					}
+					else {
+						/*console.log("право");*/
+						pressKey(39);
+					}
 				}
 				else {
-					/*console.log("право");*/
-					pressKey(39);
-				}
-			}
-			else {
-				if (nowPoint.pageY < startPoint.y) {
-					/*console.log("вверх");*/
-					pressKey(38);
-				}
-				else {
-					/*console.log("вниз");*/
-					pressKey(40);
+					if (nowPoint.pageY < startPoint.y) {
+						/*console.log("вверх");*/
+						pressKey(38);
+					}
+					else {
+						/*console.log("вниз");*/
+						pressKey(40);
+					}
 				}
 			}
 		}
