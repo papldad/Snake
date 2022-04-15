@@ -90,6 +90,7 @@ html, body {
 #demo {
 	display: block;
 	width: 100%;
+	min-height: 80vh;	
 
 	display: flex;
 	flex-direction: column;
@@ -97,6 +98,8 @@ html, body {
 	align-items: center;
 
 	overflow: auto;
+
+	padding: 0 5px;
 
 	border: 5px var(--line) solid;
 }
