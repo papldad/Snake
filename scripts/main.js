@@ -1,4 +1,4 @@
-const version = "v1.5.3"; // used jquery
+const version = "v1.5.4"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -13,23 +13,35 @@ let demoModel = {
 let settingsGame = {
 	arenaLength: document.getElementsByName('arenaLength'),
 	snakeLength: document.getElementsByName('snakeLength'),
+	maxSnakeLength: document.getElementsByName('maxSnakeLength'),
 
 	getValuesSettings: function() {
 		let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
 		let valArena = selArenaLength.value;
 		let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
 		let valSnake = selSnakeLength.value;
+		let selMaxSnakeLength = Array.from(this.maxSnakeLength).find(radio => radio.checked);
+		let valMaxSnake = selMaxSnakeLength.value;
 
 		if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
 			return false;
 		} else {
 			viewModel.amountSquare = valArena;
+			console.log(viewModel.amountSquare);
 		}
 
 		if (!(valSnake == 1 || valSnake == 4)) {
 			return false;
 		} else {
 			snake.startSnakeLength = valSnake;
+			console.log(snake.startSnakeLength);
+		}
+
+		if (!(valMaxSnake == 5 || valMaxSnake == 10 || valMaxSnake == 50 || valMaxSnake == 324)) {
+			return false;
+		} else {
+			snake.maxSnakeLength = valMaxSnake;
+			console.log(snake.maxSnakeLength);
 		}
 
 		return true;
