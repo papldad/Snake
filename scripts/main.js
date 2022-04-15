@@ -56,7 +56,7 @@ let settingsGame = {
 }, 2000);*/
 
 let viewModel = {
-
+	containerGame: document.getElementById("containerGame"),
 	boxGame: document.getElementById("boxGame"),
 	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
@@ -99,6 +99,8 @@ let viewModel = {
 			this.startGameValue = true;
 			demoModel.demo.style.display = "none";
 			this.scoreInfo.style.display = "block";
+			this.containerGame.classList.add("containerGameActive");
+			this.boxGame.classList.add("boxGameActive");
 			this.buttonsControlLeft.style.display = "block";
 			this.buttonsControlCenter.style.display = "block";
 			this.buttonsControlRight.style.display = "block";
