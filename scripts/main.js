@@ -1,4 +1,4 @@
-const version = "v1.5.4"; // used jquery
+const version = "v1.5.41"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -27,21 +27,21 @@ let settingsGame = {
 			return false;
 		} else {
 			viewModel.amountSquare = valArena;
-			console.log(viewModel.amountSquare);
+			/*console.log(viewModel.amountSquare);*/
 		}
 
 		if (!(valSnake == 1 || valSnake == 4)) {
 			return false;
 		} else {
 			snake.startSnakeLength = valSnake;
-			console.log(snake.startSnakeLength);
+			/*console.log(snake.startSnakeLength);*/
 		}
 
 		if (!(valMaxSnake == 5 || valMaxSnake == 10 || valMaxSnake == 50 || valMaxSnake == 324)) {
 			return false;
 		} else {
 			snake.maxSnakeLength = valMaxSnake;
-			console.log(snake.maxSnakeLength);
+			/*console.log(snake.maxSnakeLength);*/
 		}
 
 		return true;
