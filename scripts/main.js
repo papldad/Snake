@@ -1,4 +1,4 @@
-const version = "v1.5"; // learn jquery
+const version = "v1.5.1"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
@@ -6,6 +6,34 @@ let setAutoMove;
 let demoModel = {
 
 	demo: document.getElementById("demo"),
+
+
+}
+
+let settingsGame = {
+	arenaLength: document.getElementsByName('arenaLength'),
+	snakeLength: document.getElementsByName('snakeLength'),
+
+	getValuesSettings: function() {
+		let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
+		let valArena = selArenaLength.value;
+		let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
+		let valSnake = selSnakeLength.value;
+
+		if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
+			return false;
+		} else {
+			viewModel.amountSquare = valArena;
+		}
+
+		if (!(valSnake == 1 || valSnake == 4)) {
+			return false;
+		} else {
+			snake.startSnakeLength = valSnake;
+		}
+
+		return true;
+	}
 
 
 }
@@ -55,6 +83,7 @@ let viewModel = {
 				document.location.reload();
 			}
 		} else {
+
 			this.startGameValue = true;
 			demoModel.demo.style.display = "none";
 			this.scoreInfo.style.display = "block";
@@ -66,8 +95,10 @@ let viewModel = {
 
 			this.controlButtonValue = true;
 
-			if (this.renderArena()) {
+			if (settingsGame.getValuesSettings() && this.renderArena()) {
 				gameModel.loadGame();
+			} else {
+				console.log("Code have some errors.");
 			}
 		}
 	},

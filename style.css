@@ -131,11 +131,55 @@ html, body {
 }*/
 
 #settings {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	gap: 2vh;
+
+	/*border: 2px red solid;*/
+}
+
+#settings > p {
 	font-size: 4vh;
+
+	padding-bottom: 0.5vh;
+
+	border-bottom: 5px var(--snakeHead) solid;
+}
+
+#settingsValue:child {
+	
+	/*border: 2px greenyellow solid;*/
+}
+
+#settingsValue > div > p {
+
+	font-size: 3vh;
+}
+
+.formSetting {
+	margin: 0.5vh;
+	padding: 0.5vh;
+	margin-left: 0;
+
+
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 1em;
+
+	border-left: 5px var(--snakeBody) solid;
+}
+
+.formSetting label {
+
+	font-size: 2vh;
 }
 
 #versionInfo {
-	font-size: 3vh;
+	font-size: 1vh;
 }
 
 .squareEmpty {

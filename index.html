@@ -20,10 +20,62 @@
 
 		<div id="boxGame">
 			<div id="demo">
+
 				<div id="splashScreen">
 					<span id="splashWord">Snake</span>
 				</div>
-				<div id="settings">settings</div>
+
+				<div id="settings">
+
+					<p>settings</p>
+
+					<div id="settingsValue">
+
+						<div class="setArenaLength">
+
+							<p>Arena Length</p>
+
+							<form class="formSetting">
+								<div>
+									<input name="arenaLength" type="radio" value="80">
+									<label for="arenaLength">The Smallest</label>
+								</div>
+
+								<div>
+									<input name="arenaLength" type="radio" value="200" checked>
+									<label for="arenaLength">Medium</label>
+								</div>
+								
+								<div>
+									<input name="arenaLength" type="radio" value="400">
+									<label for="arenaLength">Standart</label>
+								</div>
+							</form>
+
+						</div>
+
+						<div class="setSnakeLength">
+
+							<p>Snake Length</p>
+
+							<form class="formSetting">
+								<div>
+									<input name="snakeLength" type="radio" value="1">
+									<label for="snakeLength">The Smallest</label>
+								</div>
+
+								<div>
+									<input name="snakeLength" type="radio" value="4" checked>
+									<label for="snakeLength">Standart</label>
+								</div>
+							</form>
+
+						</div>
+
+					</div>
+
+				</div>
+
 				<div id="versionInfo"></div>
 			</div>
 		</div>
