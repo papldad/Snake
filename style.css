@@ -88,9 +88,11 @@ html, body {
 	height: 100%;
 
 	display: flex;
-	flex-flow: column;
+	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
+
+	overflow: auto;
 
 	border: 5px var(--line) solid;
 }
@@ -98,6 +100,8 @@ html, body {
 #splashScreen {
 	/*width: 100%;
 	position: relative;*/
+	
+	margin-top: 1em; /*fix for small screen*/
 	color: var(--snakeHead);
 }
 
@@ -170,16 +174,29 @@ html, body {
 	justify-content: space-between;
 	gap: 1em;
 
-	border-left: 5px var(--snakeBody) solid;
+	border-left: 5px var(--line) solid;
 }
 
 .formSetting label {
+	
 
 	font-size: 2vh;
 }
 
-input {
-	border: 1px red solid;
+input[type='radio'],
+label {
+	cursor: pointer;
+}
+
+.formSetting input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	outline: none;
+}
+
+.formSetting input[type=radio]:checked + label {
+	color: var(--snakeBody);
 }
 
 #versionInfo {

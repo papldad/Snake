@@ -1,4 +1,4 @@
-const version = "v1.5.2"; // used jquery
+const version = "v1.5.3"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
