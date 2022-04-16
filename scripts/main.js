@@ -1,13 +1,15 @@
-const version = "v1.5.43"; // used jquery
+const version = "v1.5.5"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
 
+$( "#parSettings" ).click(function(){
+	$( "#settingsValue" ).slideToggle();
+});
+
 let demoModel = {
 
 	demo: document.getElementById("demo"),
-
-
 }
 
 let settingsGame = {

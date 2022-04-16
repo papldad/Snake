@@ -159,8 +159,8 @@ html, body {
 	border-bottom: 5px var(--snakeHead) solid;
 }
 
-#settingsValue:child {
-	
+#settingsValue {
+	display: none;
 	/*border: 2px greenyellow solid;*/
 }
 
