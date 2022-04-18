@@ -1,14 +1,13 @@
-const version = "v1.5.5"; // used jquery
+const version = "v1.6.0"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
 
-$( "#parSettings" ).click(function(){
+$( "#parSettings" ).click(function(){ // Animation of "settings".
 	$( "#settingsValue" ).slideToggle();
 });
 
 let demoModel = {
-
 	demo: document.getElementById("demo"),
 }
 
@@ -32,14 +31,14 @@ let settingsGame = {
 			/*console.log(viewModel.amountSquare);*/
 		}
 
-		if (!(valSnake == 1 || valSnake == 4)) {
+		if (!(valSnake == 1 || valSnake == 4 || valSnake == 10)) {
 			return false;
 		} else {
 			snake.startSnakeLength = valSnake;
 			/*console.log(snake.startSnakeLength);*/
 		}
 
-		if (!(valMaxSnake == 5 || valMaxSnake == 10 || valMaxSnake == 50 || valMaxSnake == 324)) {
+		if (!(valMaxSnake == 15 || valMaxSnake == 25 || valMaxSnake == 50 || valMaxSnake == 324)) {
 			return false;
 		} else {
 			snake.maxSnakeLength = valMaxSnake;
@@ -51,11 +50,6 @@ let settingsGame = {
 
 
 }
-
-/*$("#splashWord").animate({
-	left: "100%",
-	right: "0",
-}, 2000);*/
 
 let viewModel = {
 	containerGame: document.getElementById("containerGame"),
@@ -170,6 +164,9 @@ let viewModel = {
 		if (this.pauseGameValue == false) {
 			this.pauseGame();
 		}
+
+		food.position.forEach(el => viewModel.squareAll[el].classList.remove("food")); // Cleansing of food after victory.
+
 		this.buttonsControlCenter.style.display = "none";
 		this.statusInfo.style.display = "block";
 		this.spanStatus.style.color = "var(--snakeBody)";
@@ -187,8 +184,8 @@ let snake = {
 }
 
 let food = {
-	amountOnArena: 1,
-	position: undefined,
+	amountOnArena: 15,
+	position: [],
 }
 
 let gameModel = {
@@ -201,7 +198,8 @@ let gameModel = {
 		if (this.spawnSnake()) {
 			viewModel.spanScore.textContent = snake.position.length;
 			this.renderSnake();
-			this.spawnFood();
+			/*this.spawnFood();*/
+			this.spawnFoods();
 			this.autoMove();
 		}
 	},
@@ -211,7 +209,7 @@ let gameModel = {
 		for (let i = 1; i < snake.startSnakeLength; i++) {
 			snake.position[i] = snake.position[i - 1] - 1;
 		}
-		this.eventKey = 39;
+		this.eventKey = 39; // First snakes move.
 		this.activeKey = this.eventKey;
 		return true;
 	},
@@ -222,7 +220,7 @@ let gameModel = {
 			viewModel.squareAll[snake.position[i]].classList.add("snakeBody");
 		}
 		this.checkPositionSnake(snake.position);
-	},
+	},/*
 
 	spawnFood: function () {
 		if (food.position !== undefined) {
@@ -234,11 +232,69 @@ let gameModel = {
 		}
 		let allowedNumber = diff(viewModel.squareEmpty, snake.position);
 
-		var rand = Math.floor(Math.random() * allowedNumber.length);
+		let rand = Math.floor(Math.random() * allowedNumber.length);
 		food.position = allowedNumber[rand];
 
 		viewModel.squareAll[food.position].classList.add("food");
-	}, 
+	},*/ 
+
+	spawnFoods: function(changePos) {
+		let allowedNumber = [];
+		function generatorPositions () {
+			function diff(a1, a2) {
+				return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
+			}
+
+			/*let allowedNumber2 = diff(viewModel.squareEmpty, snake.position);
+			let allowedNumber = diff(allowedNumber2, food.position);*/
+			let allowedNumber2 = diff(viewModel.squareEmpty, food.position);
+			allowedNumber = diff(allowedNumber2, snake.position);
+
+			console.log("доступные: " + allowedNumber);
+
+			let rand = Math.floor(Math.random() * allowedNumber.length);
+
+			if (changePos == allowedNumber[rand]) {
+				allowedNumber[rand] = allowedNumber[Math.floor(Math.random() * allowedNumber.length)];
+			}
+
+			return allowedNumber[rand];
+		}
+
+		if (food.position.length === 0) {
+			food.position.length = food.amountOnArena;
+		}
+
+		let positionEatenFood = food.position.indexOf(changePos);
+
+		if (positionEatenFood != -1) { // For respawn eaten food.
+			if (allowedNumber.length > food.position.length || allowedNumber.length == 0) {
+				food.position[positionEatenFood] = generatorPositions();
+				viewModel.squareAll[food.position[positionEatenFood]].classList.add("food");
+			} else {
+				viewModel.squareAll[food.position[positionEatenFood]].classList.remove("food");
+				food.position.splice(positionEatenFood, 1);
+
+				/*var myArray = ['one', 'two', 'three'];
+				var myIndex = myArray.indexOf('two');
+				if (myIndex !== -1) {
+					myArray.splice(myIndex, 1);
+				}
+				console.log(myArray)
+				Выход:
+
+				["one", "three"]*/
+
+			}
+		} else { // For first spawn food.
+			for (let n = 0; n < food.position.length; n++) {
+				food.position[n] = generatorPositions();
+				viewModel.squareAll[food.position[n]].classList.add("food");
+			}
+		}
+
+		console.log("where food " + food.position);
+	},
 
 	checkPositionSnake: function (positionSnake) {
 		for (let x = 1; x < positionSnake.length; x++) {
@@ -249,22 +305,26 @@ let gameModel = {
 		}
 
 		let snakeOnBorder = viewModel.squareBorder.filter(el => positionSnake.indexOf(el) > -1);
-		
 		if (snakeOnBorder.length != 0) {
 			viewModel.gameOver("Snake on the border.");
 			return false;
-		} else if (positionSnake[0] === food.position) {
-			snake.position.push(snake.position[snake.position.length-1]);
-			viewModel.spanScore.textContent = snake.position.length;
-			if (snake.position.length == snake.maxSnakeLength || snake.position.length >= viewModel.squareEmpty.length) {
-				viewModel.squareAll[food.position].classList.remove("food");
-				viewModel.gameWin("Congratulations! You are the biggest snake!");
-			} else {
-				this.spawnFood();
-			}
-		} else {
-			return true;
 		}
+
+		food.position.filter(function (pos) { // Checking snakes positions about foods.
+			if (pos === positionSnake[0]) {
+				snake.position.push(snake.position[snake.position.length-1]);
+				viewModel.spanScore.textContent = snake.position.length;
+				viewModel.squareAll[pos].classList.remove("food");
+				if (snake.position.length >= snake.maxSnakeLength || snake.position.length >= viewModel.squareEmpty.length) {
+					viewModel.gameWin("Congratulations! You are the biggest snake!");
+				} else {
+					gameModel.spawnFoods(pos);
+				}
+				
+			}
+		});
+
+		return true;
 	},
 
 	directionSnake: function () {

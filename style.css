@@ -161,10 +161,16 @@ html, body {
 
 #settingsValue {
 	display: none;
+
 	/*border: 2px greenyellow solid;*/
 }
 
+#settingsValue > * {
+	padding-bottom: 2.5vh;
+}
+
 #settingsValue > div > p {
+	padding-bottom: 1.0vh;
 
 	font-size: 3vh;
 }
@@ -181,7 +187,7 @@ html, body {
 	justify-content: space-between;
 	gap: 1em;
 
-	border-left: 5px var(--line) solid;
+	border-left: 5px var(--snakeHead) solid;
 }
 
 .formSetting label {
