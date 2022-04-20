@@ -320,7 +320,6 @@ let gameModel = {
 				} else {
 					gameModel.spawnFoods(pos);
 				}
-				
 			}
 		});
 
