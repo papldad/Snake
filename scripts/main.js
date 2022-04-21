@@ -165,8 +165,6 @@ let viewModel = {
 			this.pauseGame();
 		}
 
-		food.position.forEach(el => viewModel.squareAll[el].classList.remove("food")); // Cleansing of food after victory.
-
 		this.buttonsControlCenter.style.display = "none";
 		this.statusInfo.style.display = "block";
 		this.spanStatus.style.color = "var(--snakeBody)";
@@ -184,7 +182,7 @@ let snake = {
 }
 
 let food = {
-	amountOnArena: 15,
+	amountOnArena: 20, // max - 26
 	position: [],
 }
 
@@ -192,7 +190,8 @@ let gameModel = {
 	
 	eventKey: null,
 	activeKey: null,
-	speedGame: 200,
+	speedGame: 500, // min 200
+	availableSquareForFood: [],
 
 	loadGame: function() {
 		if (this.spawnSnake()) {
@@ -220,80 +219,56 @@ let gameModel = {
 			viewModel.squareAll[snake.position[i]].classList.add("snakeBody");
 		}
 		this.checkPositionSnake(snake.position);
-	},/*
+	},
 
-	spawnFood: function () {
-		if (food.position !== undefined) {
-			viewModel.squareAll[food.position].classList.remove("food");
-		}
+	spawnFoods: function(posEatenFood) { // Get number square eaten a food.
 
-		function diff(a1, a2) {
+		let positionEatenFood = food.position.indexOf(posEatenFood);
+		/*console.log("posEatenFood - " + posEatenFood);
+		console.log("positionEatenFood - " + positionEatenFood);*/
+
+		function updateSquareForFood(a1, a2) {
 			return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
 		}
-		let allowedNumber = diff(viewModel.squareEmpty, snake.position);
 
-		let rand = Math.floor(Math.random() * allowedNumber.length);
-		food.position = allowedNumber[rand];
+		function generatorPositions (availableSquareForFood) {
 
-		viewModel.squareAll[food.position].classList.add("food");
-	},*/ 
+			availableSquareForFood = updateSquareForFood(viewModel.squareEmpty, snake.position);
+			availableSquareForFood = updateSquareForFood(availableSquareForFood, food.position);
 
-	spawnFoods: function(changePos) {
-		let allowedNumber = [];
-		function generatorPositions () {
-			function diff(a1, a2) {
-				return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
+			let rand = Math.floor(Math.random() * availableSquareForFood.length);
+			
+			if (posEatenFood == availableSquareForFood[rand]) {
+				console.log("if (posEatenFood == availableSquareForFood[rand])");
+				availableSquareForFood = updateSquareForFood(availableSquareForFood, [posEatenFood]);
+				viewModel.squareAll[availableSquareForFood[Math.floor(Math.random() * availableSquareForFood.length)]].classList.add("food");
+				return availableSquareForFood[Math.floor(Math.random() * availableSquareForFood.length)];
 			}
 
-			/*let allowedNumber2 = diff(viewModel.squareEmpty, snake.position);
-			let allowedNumber = diff(allowedNumber2, food.position);*/
-			let allowedNumber2 = diff(viewModel.squareEmpty, food.position);
-			allowedNumber = diff(allowedNumber2, snake.position);
-
-			console.log("доступные: " + allowedNumber);
-
-			let rand = Math.floor(Math.random() * allowedNumber.length);
-
-			if (changePos == allowedNumber[rand]) {
-				allowedNumber[rand] = allowedNumber[Math.floor(Math.random() * allowedNumber.length)];
-			}
-
-			return allowedNumber[rand];
+			viewModel.squareAll[availableSquareForFood[rand]].classList.add("food");
+			return availableSquareForFood[rand];
 		}
 
-		if (food.position.length === 0) {
-			food.position.length = food.amountOnArena;
-		}
-
-		let positionEatenFood = food.position.indexOf(changePos);
+		
 
 		if (positionEatenFood != -1) { // For respawn eaten food.
-			if (allowedNumber.length > food.position.length || allowedNumber.length == 0) {
-				food.position[positionEatenFood] = generatorPositions();
-				viewModel.squareAll[food.position[positionEatenFood]].classList.add("food");
-			} else {
-				viewModel.squareAll[food.position[positionEatenFood]].classList.remove("food");
-				food.position.splice(positionEatenFood, 1);
 
-				/*var myArray = ['one', 'two', 'three'];
-				var myIndex = myArray.indexOf('two');
-				if (myIndex !== -1) {
-					myArray.splice(myIndex, 1);
-				}
-				console.log(myArray)
-				Выход:
-
-				["one", "three"]*/
-
+			
+			viewModel.squareAll[food.position[positionEatenFood]].classList.remove("food");
+			food.position.splice(positionEatenFood, 1);
+			availableSquareForFood = updateSquareForFood(viewModel.squareEmpty, snake.position);
+			availableSquareForFood = updateSquareForFood(availableSquareForFood, food.position);
+			if (availableSquareForFood.length != 0) {
+				food.position.push(generatorPositions(this.availableSquareForFood));
 			}
 		} else { // For first spawn food.
-			for (let n = 0; n < food.position.length; n++) {
-				food.position[n] = generatorPositions();
-				viewModel.squareAll[food.position[n]].classList.add("food");
-			}
-		}
+			food.position.length = food.amountOnArena;
 
-		console.log("where food " + food.position);
+			for (let n = 0; n < food.position.length; n++) {
+				food.position[n] = generatorPositions(this.availableSquareForFood);
+			}
+
+		}
 	},
 
 	checkPositionSnake: function (positionSnake) {
@@ -310,16 +285,17 @@ let gameModel = {
 			return false;
 		}
 
-		food.position.filter(function (pos) { // Checking snakes positions about foods.
-			if (pos === positionSnake[0]) {
-				snake.position.push(snake.position[snake.position.length-1]);
-				viewModel.spanScore.textContent = snake.position.length;
-				viewModel.squareAll[pos].classList.remove("food");
+		food.position.filter(function (positionFood) { // Checking snakes positions about foods.
+			if (positionFood === positionSnake[0]) {
 				if (snake.position.length >= snake.maxSnakeLength || snake.position.length >= viewModel.squareEmpty.length) {
+					viewModel.squareAll[positionFood].classList.remove("food");
 					viewModel.gameWin("Congratulations! You are the biggest snake!");
 				} else {
-					gameModel.spawnFoods(pos);
+					gameModel.spawnFoods(positionFood); // Send to spawnFoods number square eaten a food.
 				}
+
+				snake.position.push(snake.position[snake.position.length-1]);
+				viewModel.spanScore.textContent = snake.position.length;
 			}
 		});
 
