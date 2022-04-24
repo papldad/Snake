@@ -107,8 +107,6 @@ html, body {
 }
 
 #splashScreen {
-	/*width: 100%;
-	position: relative;*/
 
 	margin-top: 1em; /*fix for small screen*/
 	color: var(--snakeHead);
@@ -117,33 +115,9 @@ html, body {
 }
 
 #splashWord {
-	/*position: absolute;
-
-	-webkit-animation: moveWord 2s linear infinite alternate;
-	animation: moveWord 2s linear infinite alternate;
-
-	-webkit-transform-origin: top right;
-	transform-origin: top right;*/
 
 	font-size: 6vh;
 }
-
-/*@keyframes moveWord {
-	0% {
-		right: 0;
-
-	}
-
-	100% {
-		-webkit-transform-origin: top right;
-		transform-origin: top right;
-
-		-webkit-transform: translateX(100%);
-		transform: translateX(100%);
-
-		right: 100%;
-	}
-}*/
 
 #settings {
 	display: flex;
@@ -151,8 +125,6 @@ html, body {
 	justify-content: space-around;
 	align-items: center;
 	gap: 2vh;
-
-	/*border: 2px red solid;*/
 }
 
 #parSettings {
@@ -162,7 +134,7 @@ html, body {
 	border-top: 5px var(--bg) solid;
 	border-bottom: 5px var(--snakeHead) solid;
 
-	transition: all 1.5s;
+	transition: all 0.75s;
 }
 
 .settingsParActive {
@@ -173,8 +145,6 @@ html, body {
 
 #settingsValue {
 	display: none;
-
-	/*border: 2px greenyellow solid;*/
 }
 
 #settingsValue > * {
@@ -211,15 +181,21 @@ html, body {
 input[type='radio'],
 label {
 	cursor: pointer;
-}
 
-.formSetting input {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 
 	outline: none;
 }
+
+/*.formSetting input {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+
+	outline: none;
+}*/
 
 .formSetting input[type=radio]:checked + label {
 	color: var(--snakeBody);
@@ -231,9 +207,7 @@ label {
 
 .squareEmpty {
 	width: 5%;
-	height: 5%; 
-
-	/*border: 0.1em var(--line) solid;*/
+	height: 5%;
 }
 
 .squareBorder {

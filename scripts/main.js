@@ -1,82 +1,68 @@
-const version = "v1.7.0"; // used jquery
+const version = "v1.7.1"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
-let setAutoMove;
+let demoModel = {
+	demo: document.getElementById("demo"),
+}
 
-$( "#parSettings" ).click(function(){ // Animation of "settings".
-	$( "#settingsValue" ).slideToggle();
-	$( "#splashScreen" ).slideToggle();
-	$( "#parSettings" ).toggleClass( "settingsParActive" );
-	
-});
+let settingsGame = {
+	arenaLength: document.getElementsByName('arenaLength'),
+	snakeLength: document.getElementsByName('snakeLength'),
+	maxSnakeLength: document.getElementsByName('maxSnakeLength'),
+	amountFood: document.getElementsByName('amountFood'),
+	speedGame: document.getElementsByName('speedGame'),
 
-	let demoModel = {
-		demo: document.getElementById("demo"),
-	}
+	getValuesSettings: function() {
+		let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
+		let valArena = selArenaLength.value;
+		let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
+		let valSnake = selSnakeLength.value;
+		let selMaxSnakeLength = Array.from(this.maxSnakeLength).find(radio => radio.checked);
+		let valMaxSnake = selMaxSnakeLength.value;
+		let selAmountFood = Array.from(this.amountFood).find(radio => radio.checked);
+		let valAmountFood = selAmountFood.value;
+		let selSpeedGame = Array.from(this.speedGame).find(radio => radio.checked);
+		let valSpeedGame = selSpeedGame.value;
 
-	let settingsGame = {
-		arenaLength: document.getElementsByName('arenaLength'),
-		snakeLength: document.getElementsByName('snakeLength'),
-		maxSnakeLength: document.getElementsByName('maxSnakeLength'),
-		amountFood: document.getElementsByName('amountFood'),
-		speedGame: document.getElementsByName('speedGame'),
-
-		getValuesSettings: function() {
-			let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
-			let valArena = selArenaLength.value;
-			let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
-			let valSnake = selSnakeLength.value;
-			let selMaxSnakeLength = Array.from(this.maxSnakeLength).find(radio => radio.checked);
-			let valMaxSnake = selMaxSnakeLength.value;
-			let selAmountFood = Array.from(this.amountFood).find(radio => radio.checked);
-			let valAmountFood = selAmountFood.value;
-			let selSpeedGame = Array.from(this.speedGame).find(radio => radio.checked);
-			let valSpeedGame = selSpeedGame.value;
-
-			if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
-				return false;
-			} else {
-				viewModel.amountSquare = valArena;
-				/*console.log(viewModel.amountSquare);*/
-			}
-
-			if (!(valSnake == 1 || valSnake == 4 || valSnake == 10)) {
-				return false;
-			} else {
-				snake.startSnakeLength = valSnake;
-				/*console.log(snake.startSnakeLength);*/
-			}
-
-			if (!(valMaxSnake == 15 || valMaxSnake == 25 || valMaxSnake == 50 || valMaxSnake == 324)) {
-				return false;
-			} else {
-				snake.maxSnakeLength = valMaxSnake;
-				/*console.log(snake.maxSnakeLength);*/
-			}
-
-			if (!(valAmountFood == 1 || valAmountFood == 2 || valAmountFood == 15 || valAmountFood == 100)) {
-				return false;
-			} else {
-				food.amountOnArena = valAmountFood;
-				/*console.log(snake.maxSnakeLength);*/
-			}
-
-			if (!(valSpeedGame == 800 || valSpeedGame == 500 || valSpeedGame == 200)) {
-				return false;
-			} else {
-				gameModel.speedGame = valSpeedGame;
-				/*console.log(snake.maxSnakeLength);*/
-			}
-
-			return true;
+		if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
+			return false;
+		} else {
+			viewModel.amountSquare = valArena;
 		}
 
+		if (!(valSnake == 1 || valSnake == 4 || valSnake == 10)) {
+			return false;
+		} else {
+			snake.startSnakeLength = valSnake;
+		}
 
+		if (!(valMaxSnake == 15 || valMaxSnake == 25 || valMaxSnake == 50 || valMaxSnake == 324)) {
+			return false;
+		} else {
+			snake.maxSnakeLength = valMaxSnake;
+		}
+
+		if (!(valAmountFood == 1 || valAmountFood == 2 || valAmountFood == 15 || valAmountFood == 100)) {
+			return false;
+		} else {
+			food.amountOnArena = valAmountFood;
+		}
+
+		if (!(valSpeedGame == 800 || valSpeedGame == 500 || valSpeedGame == 200)) {
+			return false;
+		} else {
+			gameModel.speedGame = valSpeedGame;
+		}
+
+		return true;
 	}
 
-	let viewModel = {
-		containerGame: document.getElementById("containerGame"),
-		boxGame: document.getElementById("boxGame"),
+
+}
+
+let viewModel = {
+	containerGame: document.getElementById("containerGame"),
+	boxGame: document.getElementById("boxGame"),
 	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
 	squareEmpty: [],
@@ -149,8 +135,6 @@ $( "#parSettings" ).click(function(){ // Animation of "settings".
 			}
 			this.boxGame.append(div);
 		}
-		/*console.log("squareEmpty: " + this.squareEmpty);
-		console.log("squareBorder: " + this.squareBorder);*/
 		return true;		
 	},
 
@@ -172,42 +156,39 @@ $( "#parSettings" ).click(function(){ // Animation of "settings".
 		}
 	},
 
-	gameOver: function (message) {
+	endGame: function (status, message) {
 		if (this.pauseGameValue == false) {
 			this.pauseGame();
 		}
 		this.buttonsControlCenter.style.display = "none";
 		this.statusInfo.style.display = "block";
-		this.spanStatus.style.color = "var(--food)";
-		this.spanStatus.textContent = "Game Over! " + message;
-		this.gameOverValue = true;
-	},
-
-	gameWin: function (message) {
-		if (this.pauseGameValue == false) {
-			this.pauseGame();
+		if (status === "gameWin") {
+			this.spanStatus.style.color = "var(--snakeBody)";
+			this.spanStatus.textContent = "Winner! " + message;
+			this.gameWinValue = true;
+		} else if (status === "gameOver") {
+			this.spanStatus.style.color = "var(--food)";
+			this.spanStatus.textContent = "Game Over! " + message;
+			this.gameOverValue = true;
 		}
-
-		this.buttonsControlCenter.style.display = "none";
-		this.statusInfo.style.display = "block";
-		this.spanStatus.style.color = "var(--snakeBody)";
-		this.spanStatus.textContent = "Winner! " + message;
-		this.gameWinValue = true;
+		
 	},
 
 }
 
 let snake = {
 	startSnakeLength: 4,
-	startPosition: 30,
+	startPosition: 30, // What is the starting position of the snake.
 	position: [],
-	maxSnakeLength: 50, // should be max 324, because emptySquare = 324
+	maxSnakeLength: 324, // Value for win.
 }
 
 let food = {
 	amountOnArena: 1,
 	position: [],
 }
+
+let setAutoMove;
 
 let gameModel = {
 	
@@ -219,7 +200,6 @@ let gameModel = {
 		if (this.spawnSnake()) {
 			viewModel.spanScore.textContent = snake.position.length;
 			this.renderSnake();
-			/*this.spawnFood();*/
 			this.spawnFoods();
 			this.autoMove();
 		}
@@ -230,7 +210,7 @@ let gameModel = {
 		for (let i = 1; i < snake.startSnakeLength; i++) {
 			snake.position[i] = snake.position[i - 1] - 1;
 		}
-		this.eventKey = 39; // First snakes move.
+		this.eventKey = 39; // First movement of the snake.
 		this.activeKey = this.eventKey;
 		return true;
 	},
@@ -292,14 +272,14 @@ let gameModel = {
 	checkPositionSnake: function (positionSnake) {
 		for (let x = 1; x < positionSnake.length; x++) {
 			if (positionSnake[0] == positionSnake[x]) {
-				viewModel.gameOver("Head Snake ate body.");
+				viewModel.endGame("gameOver", "Head Snake ate body.");
 				return false;
 			}
 		}
 
 		let snakeOnBorder = viewModel.squareBorder.filter(el => positionSnake.indexOf(el) > -1);
 		if (snakeOnBorder.length != 0) {
-			viewModel.gameOver("Snake on the border.");
+			viewModel.endGame("gameOver", "Snake on the border.");
 			return false;
 		}
 
@@ -307,7 +287,7 @@ let gameModel = {
 			if (positionFood === positionSnake[0]) {
 				if (snake.position.length >= snake.maxSnakeLength || snake.position.length >= viewModel.squareEmpty.length) {
 					viewModel.squareAll[positionFood].classList.remove("food");
-					viewModel.gameWin("Congratulations! You are the biggest snake!");
+					viewModel.endGame("gameWin", "Congratulations! You are the biggest snake!");
 				} else {
 					gameModel.spawnFoods(positionFood); // Send to spawnFoods number square eaten a food.
 				}
@@ -336,8 +316,6 @@ let gameModel = {
 		let oldPositionSnake = snake.position.slice();
 
 		if (this.activeKey == 37) {
-			/*console.log("LEFT - " + this.activeKey);*/
-
 			viewModel.buttonLeft.classList.add("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
 			viewModel.buttonUp.classList.remove("buttonControlActive");
@@ -345,8 +323,6 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] - 1;
 		} else if (this.activeKey == 39) {
-			/*console.log("RIGHT - " + this.activeKey);*/
-
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.add("buttonControlActive");
 			viewModel.buttonUp.classList.remove("buttonControlActive");
@@ -355,8 +331,6 @@ let gameModel = {
 			snake.position[0] = snake.position[0] + 1;
 
 		} else if (this.activeKey == 38) {
-			/*console.log("UP - " + this.activeKey);*/
-
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
 			viewModel.buttonUp.classList.add("buttonControlActive");
@@ -364,8 +338,6 @@ let gameModel = {
 
 			snake.position[0] = snake.position[0] - 20;
 		} else if (this.activeKey == 40) {
-			/*console.log("DOWN - " + this.activeKey);*/
-
 			viewModel.buttonLeft.classList.remove("buttonControlActive");
 			viewModel.buttonRight.classList.remove("buttonControlActive");
 			viewModel.buttonUp.classList.remove("buttonControlActive");
@@ -392,6 +364,14 @@ let gameModel = {
 // ============================================
 
 function init() {
+
+	$( "#parSettings" ).click(function(){ // Animation of "settings".
+		$( "#settingsValue" ).slideToggle();
+		$( "#splashScreen" ).slideToggle();
+		$( "#parSettings" ).toggleClass( "settingsParActive" );
+
+	});
+
 	// ============================================
 	versionInfo.textContent = version;
 	// ============================================
@@ -416,7 +396,7 @@ function init() {
 
 	// ============================================
 
-	let startPoint={};
+	let startPoint = {};
 	let nowPoint;
 	let ldelay;
 	
@@ -430,7 +410,6 @@ function init() {
 		}
 	}, false);
 
-	/*Ловим движение пальцем*/
 	viewModel.boxGame.addEventListener('touchmove', function(event) {
 		if (viewModel.controlButtonValue) {
 			event.preventDefault();
@@ -438,15 +417,7 @@ function init() {
 			let otk = {};
 			nowPoint = event.changedTouches[0];
 			otk.x = nowPoint.pageX - startPoint.x;
-			/*Обработайте данные*/
-			/*Для примера*/
 			if (Math.abs(otk.x) > 200) {
-				if (otk.x < 0) {
-					/*СВАЙП ВЛЕВО(ПРЕД.СТРАНИЦА)*/
-				}
-				if (otk.x > 0) {
-					/*СВАЙП ВПРАВО(СЛЕД.СТРАНИЦА)*/
-				}
 				startPoint = {
 					x:nowPoint.pageX,y:nowPoint.pageY
 				};
@@ -454,7 +425,6 @@ function init() {
 		}
 	}, false);
 
-	/*Ловим отпускание пальца*/
 	viewModel.boxGame.addEventListener('touchend', function(event) {
 		if (viewModel.controlButtonValue) {
 			let pdelay = new Date();
@@ -464,21 +434,17 @@ function init() {
 			if ((xAbs > 20 || yAbs > 20) && (pdelay.getTime()-ldelay.getTime()) < 200) {
 				if (xAbs > yAbs) {
 					if (nowPoint.pageX < startPoint.x) {
-						/*console.log("влево");*/
 						pressKey(37);
 					}
 					else {
-						/*console.log("право");*/
 						pressKey(39);
 					}
 				}
 				else {
 					if (nowPoint.pageY < startPoint.y) {
-						/*console.log("вверх");*/
 						pressKey(38);
 					}
 					else {
-						/*console.log("вниз");*/
 						pressKey(40);
 					}
 				}
@@ -502,39 +468,3 @@ function init() {
 }
 
 window.onload = init;
-
-/*var treshold = 10; // пороговое значение (если расстояние тача больше него, значит у нас свайп, а не клик)
-var touchStart = { // тут храним начальные координаты тача
-	x: 0,
-	y: 0
-};
-
-const slider = document.getElementById("boxGame");
-let startPoint;
-let moved = false;
-function touch(e) {
-	e.preventDefault();
-	startPoint = e.changedTouches[0].pageX;
-}
-function move(e) {
-	if (moved) {
-		return;
-	}
-	e.preventDefault();
-	if (e.changedTouches[0].pageX > startPoint + slider.offsetWidth / 4) {
-		console.log("направо");
-		moved = true;
-	}
-	if (e.changedTouches[0].pageX < startPoint - slider.offsetWidth / 4) {
-		console.log("налево");
-		moved = true;
-	}
-}
-slider.addEventListener("touchmove", move);
-slider.addEventListener("touchstart", touch);
-slider.addEventListener("touchend", () => {
-	setTimeout(() => {
-		moved = !moved;
-	}, 200);
-});*/
-
