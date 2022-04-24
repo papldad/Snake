@@ -173,29 +173,21 @@ html, body {
 }
 
 .formSetting label {
-	
-
 	font-size: 2vh;
 }
 
 input[type='radio'],
 label {
 	cursor: pointer;
-
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-
-	outline: none;
 }
 
-/*.formSetting input {
-	appearance: none;
+input[type='radio'] {
+	display: none;
+
 	-webkit-appearance: none;
 	-moz-appearance: none;
-
-	outline: none;
-}*/
+	appearance: none;
+}
 
 .formSetting input[type=radio]:checked + label {
 	color: var(--snakeBody);

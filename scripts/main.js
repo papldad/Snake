@@ -1,4 +1,4 @@
-const version = "v1.7.1"; // used jquery
+const version = "v1.7.2";
 const versionInfo = document.getElementById("versionInfo");
 
 let demoModel = {
