@@ -31,8 +31,8 @@ html, body {
 }
 
 #containerGame {
-	width: 100vw;
-	height: 100vh;
+	max-width: 100vw;
+	min-height: 100vh;
 
 	margin: 0 auto;
 
@@ -45,6 +45,8 @@ html, body {
 
 .containerGameActive {
 	position: fixed; /*fix: fixed page for smartphones*/
+	width: 100vw;
+	height: 100vh;
 }
 
 #boxInfo {
@@ -99,7 +101,7 @@ html, body {
 
 	overflow: auto;
 
-	padding: 0 5px;
+	padding: 25px 5px;
 
 	border: 5px var(--line) solid;
 }
@@ -110,6 +112,8 @@ html, body {
 
 	margin-top: 1em; /*fix for small screen*/
 	color: var(--snakeHead);
+
+	display: block;
 }
 
 #splashWord {
@@ -151,12 +155,20 @@ html, body {
 	/*border: 2px red solid;*/
 }
 
-#settings > p {
+#parSettings {
 	font-size: 4vh;
-
+	padding-top: 1vh;
 	padding-bottom: 0.5vh;
-
+	border-top: 5px var(--bg) solid;
 	border-bottom: 5px var(--snakeHead) solid;
+
+	transition: all 1.5s;
+}
+
+.settingsParActive {
+	color: var(--snakeHead);
+	border-top: 5px var(--snakeHead) solid !important;
+	border-bottom: 5px var(--bg) solid !important;
 }
 
 #settingsValue {

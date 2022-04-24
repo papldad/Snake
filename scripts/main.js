@@ -1,59 +1,82 @@
-const version = "v1.6.0"; // used jquery
+const version = "v1.7.0"; // used jquery
 const versionInfo = document.getElementById("versionInfo");
 
 let setAutoMove;
 
 $( "#parSettings" ).click(function(){ // Animation of "settings".
 	$( "#settingsValue" ).slideToggle();
+	$( "#splashScreen" ).slideToggle();
+	$( "#parSettings" ).toggleClass( "settingsParActive" );
+	
 });
 
-let demoModel = {
-	demo: document.getElementById("demo"),
-}
-
-let settingsGame = {
-	arenaLength: document.getElementsByName('arenaLength'),
-	snakeLength: document.getElementsByName('snakeLength'),
-	maxSnakeLength: document.getElementsByName('maxSnakeLength'),
-
-	getValuesSettings: function() {
-		let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
-		let valArena = selArenaLength.value;
-		let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
-		let valSnake = selSnakeLength.value;
-		let selMaxSnakeLength = Array.from(this.maxSnakeLength).find(radio => radio.checked);
-		let valMaxSnake = selMaxSnakeLength.value;
-
-		if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
-			return false;
-		} else {
-			viewModel.amountSquare = valArena;
-			/*console.log(viewModel.amountSquare);*/
-		}
-
-		if (!(valSnake == 1 || valSnake == 4 || valSnake == 10)) {
-			return false;
-		} else {
-			snake.startSnakeLength = valSnake;
-			/*console.log(snake.startSnakeLength);*/
-		}
-
-		if (!(valMaxSnake == 15 || valMaxSnake == 25 || valMaxSnake == 50 || valMaxSnake == 324)) {
-			return false;
-		} else {
-			snake.maxSnakeLength = valMaxSnake;
-			/*console.log(snake.maxSnakeLength);*/
-		}
-
-		return true;
+	let demoModel = {
+		demo: document.getElementById("demo"),
 	}
 
+	let settingsGame = {
+		arenaLength: document.getElementsByName('arenaLength'),
+		snakeLength: document.getElementsByName('snakeLength'),
+		maxSnakeLength: document.getElementsByName('maxSnakeLength'),
+		amountFood: document.getElementsByName('amountFood'),
+		speedGame: document.getElementsByName('speedGame'),
 
-}
+		getValuesSettings: function() {
+			let selArenaLength = Array.from(this.arenaLength).find(radio => radio.checked);
+			let valArena = selArenaLength.value;
+			let selSnakeLength = Array.from(this.snakeLength).find(radio => radio.checked);
+			let valSnake = selSnakeLength.value;
+			let selMaxSnakeLength = Array.from(this.maxSnakeLength).find(radio => radio.checked);
+			let valMaxSnake = selMaxSnakeLength.value;
+			let selAmountFood = Array.from(this.amountFood).find(radio => radio.checked);
+			let valAmountFood = selAmountFood.value;
+			let selSpeedGame = Array.from(this.speedGame).find(radio => radio.checked);
+			let valSpeedGame = selSpeedGame.value;
 
-let viewModel = {
-	containerGame: document.getElementById("containerGame"),
-	boxGame: document.getElementById("boxGame"),
+			if (!(valArena == 80 || valArena == 200 || valArena == 400)) {
+				return false;
+			} else {
+				viewModel.amountSquare = valArena;
+				/*console.log(viewModel.amountSquare);*/
+			}
+
+			if (!(valSnake == 1 || valSnake == 4 || valSnake == 10)) {
+				return false;
+			} else {
+				snake.startSnakeLength = valSnake;
+				/*console.log(snake.startSnakeLength);*/
+			}
+
+			if (!(valMaxSnake == 15 || valMaxSnake == 25 || valMaxSnake == 50 || valMaxSnake == 324)) {
+				return false;
+			} else {
+				snake.maxSnakeLength = valMaxSnake;
+				/*console.log(snake.maxSnakeLength);*/
+			}
+
+			if (!(valAmountFood == 1 || valAmountFood == 2 || valAmountFood == 15 || valAmountFood == 100)) {
+				return false;
+			} else {
+				food.amountOnArena = valAmountFood;
+				/*console.log(snake.maxSnakeLength);*/
+			}
+
+			if (!(valSpeedGame == 800 || valSpeedGame == 500 || valSpeedGame == 200)) {
+				return false;
+			} else {
+				gameModel.speedGame = valSpeedGame;
+				/*console.log(snake.maxSnakeLength);*/
+			}
+
+			return true;
+		}
+
+
+	}
+
+	let viewModel = {
+		containerGame: document.getElementById("containerGame"),
+		boxGame: document.getElementById("boxGame"),
 	amountSquare: 400, // min 80, max 400
 	squareAll: document.getElementsByClassName("squareEmpty"),
 	squareEmpty: [],
@@ -182,7 +205,7 @@ let snake = {
 }
 
 let food = {
-	amountOnArena: 20, // max - 26
+	amountOnArena: 1,
 	position: [],
 }
 
@@ -191,7 +214,6 @@ let gameModel = {
 	eventKey: null,
 	activeKey: null,
 	speedGame: 500, // min 200
-	availableSquareForFood: [],
 
 	loadGame: function() {
 		if (this.spawnSnake()) {
@@ -222,52 +244,48 @@ let gameModel = {
 	},
 
 	spawnFoods: function(posEatenFood) { // Get number square eaten a food.
-
+		let availableSquareForFood = [];
 		let positionEatenFood = food.position.indexOf(posEatenFood);
-		/*console.log("posEatenFood - " + posEatenFood);
-		console.log("positionEatenFood - " + positionEatenFood);*/
 
-		function updateSquareForFood(a1, a2) {
-			return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
+		function updateSquareForFood() {
+			function diff(a1, a2) {
+				return a1.filter(i=>a2.indexOf(i)<0).concat(a2.filter(i=>a1.indexOf(i)<0));
+			}
+			return diff(diff(viewModel.squareEmpty, snake.position), food.position);
 		}
 
-		function generatorPositions (availableSquareForFood) {
-
-			availableSquareForFood = updateSquareForFood(viewModel.squareEmpty, snake.position);
-			availableSquareForFood = updateSquareForFood(availableSquareForFood, food.position);
-
+		function generatorPositions() {
+			availableSquareForFood = updateSquareForFood().slice(0);
 			let rand = Math.floor(Math.random() * availableSquareForFood.length);
-			
-			if (posEatenFood == availableSquareForFood[rand]) {
-				console.log("if (posEatenFood == availableSquareForFood[rand])");
-				availableSquareForFood = updateSquareForFood(availableSquareForFood, [posEatenFood]);
-				viewModel.squareAll[availableSquareForFood[Math.floor(Math.random() * availableSquareForFood.length)]].classList.add("food");
-				return availableSquareForFood[Math.floor(Math.random() * availableSquareForFood.length)];
-			}
-
-			viewModel.squareAll[availableSquareForFood[rand]].classList.add("food");
 			return availableSquareForFood[rand];
 		}
 
-		
+		function renderFood(newPosition) {
+			food.position.push(newPosition);
+			viewModel.squareAll[newPosition].classList.add("food");
+			return;
+		}
 
 		if (positionEatenFood != -1) { // For respawn eaten food.
 
-			
 			viewModel.squareAll[food.position[positionEatenFood]].classList.remove("food");
 			food.position.splice(positionEatenFood, 1);
-			availableSquareForFood = updateSquareForFood(viewModel.squareEmpty, snake.position);
-			availableSquareForFood = updateSquareForFood(availableSquareForFood, food.position);
+
+			availableSquareForFood = updateSquareForFood().slice(0);
 			if (availableSquareForFood.length != 0) {
-				food.position.push(generatorPositions(this.availableSquareForFood));
+				renderFood(generatorPositions());
+			} else {
+				return;
 			}
 		} else { // For first spawn food.
-			food.position.length = food.amountOnArena;
-
-			for (let n = 0; n < food.position.length; n++) {
-				food.position[n] = generatorPositions(this.availableSquareForFood);
+			for (let n = 0; n < food.amountOnArena; n++) {
+				availableSquareForFood = updateSquareForFood().slice(0);
+				if (availableSquareForFood.length != 0) {
+					renderFood(generatorPositions());
+				} else {
+					return;
+				}
 			}
-
 		}
 	},
 
